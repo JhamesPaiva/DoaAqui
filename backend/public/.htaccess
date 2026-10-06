@@ -1,0 +1,8 @@
+# Desliga a listagem de diretório (ninguém deve ver a árvore de arquivos da API).
+Options -Indexes
+
+# Bloqueia qualquer arquivo que comece com ponto (.env, .git, etc.), caso algum dia
+# acabe indo parar dentro de public/ por engano.
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>

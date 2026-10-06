@@ -1,0 +1,10 @@
+.how{padding:52px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .how h2{font-size:28px;margin-bottom:8px;}
+  .how p.sub{color:var(--ink-soft);margin:0 0 32px;max-width:60ch;}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
+  .step{padding:22px 22px 24px;background:var(--white);border:1px solid var(--line);}
+  .step .num{
+    font-family:'Fraunces',serif;font-size:34px;color:var(--gold);font-weight:700;line-height:1;
+  }
+  .step h3{font-size:18px;margin:14px 0 8px;}
+  .step p{margin:0;color:var(--ink-soft);font-size:14.5px;}

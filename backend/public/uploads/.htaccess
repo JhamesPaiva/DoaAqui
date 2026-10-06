@@ -1,0 +1,7 @@
+# Esta pasta só guarda imagens enviadas por usuários. Mesmo que um arquivo malicioso
+# escape da validação de tipo do UploadService, ele nunca deve rodar como script aqui.
+Options -Indexes -ExecCGI
+
+<FilesMatch "\.(php|phtml|php\d|pl|py|cgi|sh|exe)$">
+    Require all denied
+</FilesMatch>

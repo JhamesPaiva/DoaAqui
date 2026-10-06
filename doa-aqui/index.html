@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doa Aqui — Mural de Doações Solidárias</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/cabecalho.css">
+<link rel="stylesheet" href="css/hero.css">
+<link rel="stylesheet" href="css/como-funciona.css">
+<link rel="stylesheet" href="css/mural.css">
+<link rel="stylesheet" href="css/modal.css">
+<link rel="stylesheet" href="css/toast.css">
+<link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="css/rodape.css">
+<link rel="stylesheet" href="css/responsivo.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <a href="index.html" class="logo"><span class="mark">D</span>Doa Aqui</a>
+    <nav class="main">
+      <a href="index.html" class="active">Mural</a>
+      <a href="index.html#como-funciona">Como funciona</a>
+      <a href="admin.html" id="nav-admin">Painel administrativo</a>
+    </nav>
+    <div class="header-actions">
+      <button class="btn btn-gold" id="btn-open-form">Anunciar doação</button>
+      <div class="auth-area" id="auth-area"></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <h1>Doe o que sobra. Encontre o que falta.</h1>
+        <p class="lead">Um mural para a comunidade de Muriaé doar roupas, móveis, alimentos e outros itens úteis — e para quem precisa encontrar tudo isso num só lugar.</p>
+        <form class="search-box" id="search-form">
+          <input type="text" id="search-input" placeholder="Buscar por item, ex: fogão, casaco…" aria-label="Buscar item">
+          <button type="submit">Buscar</button>
+        </form>
+        <div class="stat-row">
+          <div class="stat"><b id="stat-total">—</b><span>itens no mural</span></div>
+          <div class="stat"><b id="stat-disponiveis">—</b><span>disponíveis agora</span></div>
+          <div class="stat"><b>6</b><span>categorias</span></div>
+        </div>
+      </div>
+      <div class="hero-board" aria-hidden="true">
+        <div class="tag-note" style="--r:-0.8deg"><span class="pin"></span><b>Fogão 4 bocas</b>usado, funcionando — bairro Centro</div>
+        <div class="tag-note" style="--r:0.6deg"><span class="pin"></span><b>Casacos infantis</b>tam. 4 a 8 — bairro São José</div>
+        <div class="tag-note" style="--r:-0.5deg"><span class="pin"></span><b>Cesta de alimentos</b>não perecíveis — retirar até sexta</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="how" id="como-funciona">
+    <div class="wrap">
+      <h2>Como funciona</h2>
+      <p class="sub">Três passos simples para doar ou encontrar uma doação, sem burocracia e sem custo.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="num">1</div>
+          <h3>Publique ou navegue</h3>
+          <p>Quem tem algo para doar publica o item com foto e descrição. Quem precisa navega pelo mural filtrando por categoria e localização.</p>
+        </div>
+        <div class="step">
+          <div class="num">2</div>
+          <h3>Combine a retirada</h3>
+          <p>Ao encontrar um item, o interessado entra em contato direto com o doador para combinar onde e quando buscar.</p>
+        </div>
+        <div class="step">
+          <div class="num">3</div>
+          <h3>Atualize o status</h3>
+          <p>O doador marca o item como Reservado quando alguém já garantiu e como Doado assim que a entrega acontece.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mural" id="mural">
+    <div class="wrap">
+      <div class="mural-head">
+        <div>
+          <h2>Mural de doações</h2>
+          <p id="results-count">Carregando itens…</p>
+        </div>
+      </div>
+      <div class="mural-layout">
+        <aside class="filters">
+          <h4>Filtrar itens</h4>
+          <div class="filter-group">
+            <span class="label">Categoria</span>
+            <div id="category-filters"></div>
+          </div>
+          <div class="filter-group">
+            <span class="label">Status</span>
+            <label class="chip-option"><input type="checkbox" class="status-filter" value="Disponível" checked> Disponível</label>
+            <label class="chip-option"><input type="checkbox" class="status-filter" value="Reservado" checked> Reservado</label>
+            <label class="chip-option"><input type="checkbox" class="status-filter" value="Doado"> Doado</label>
+          </div>
+          <div class="filter-group">
+            <span class="label">Localização</span>
+            <select class="filter-select" id="location-filter">
+              <option value="">Todos os bairros</option>
+            </select>
+          </div>
+          <button class="clear-filters" id="clear-filters">Limpar filtros</button>
+        </aside>
+        <div>
+          <div class="grid" id="items-grid"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap footer-grid">
+    <div>
+      <h3>Doa Aqui</h3>
+      <p>Mural de doações solidárias desenvolvido como projeto de extensão universitária, aproximando quem quer doar de quem precisa.</p>
+    </div>
+    <div>
+      <h3>Equipe</h3>
+      <ul class="team-list">
+        <li>André de Castro</li>
+        <li>Arthur Belinato</li>
+        <li>Cloviano Albuini</li>
+        <li>Jhames Paiva</li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap foot-bottom">
+    <span>Análise e Desenvolvimento de Sistemas — Extensão Universitária III</span>
+    <span>Protótipo de demonstração, sem envio de dados a servidor</span>
+  </div>
+</footer>
+
+<div class="overlay" id="detail-overlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Detalhes do item</h3>
+      <button class="modal-close" data-close>&times;</button>
+    </div>
+    <div class="modal-body" id="detail-body"></div>
+  </div>
+</div>
+
+<div class="overlay" id="form-overlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Anunciar uma doação</h3>
+      <button class="modal-close" data-close>&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="new-item-form">
+        <div class="field">
+          <label for="f-title">Nome do item</label>
+          <input type="text" id="f-title" placeholder="Ex: Guarda-roupa 3 portas" required>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="f-category">Categoria</label>
+            <select id="f-category" required>
+              <option value="">Selecione</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-location">Bairro</label>
+            <select id="f-location" required>
+              <option value="">Selecione</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="f-desc">Descrição</label>
+          <textarea id="f-desc" placeholder="Conte o estado do item e detalhes que ajudam quem for buscar" required></textarea>
+        </div>
+        <div class="field">
+          <label for="f-foto">Foto do item — opcional</label>
+          <label class="upload-box" for="f-foto">
+            <b>Arraste uma foto ou clique para escolher</b>
+            <span id="f-foto-hint">JPG, PNG ou WEBP, até 5MB</span>
+          </label>
+          <input type="file" id="f-foto" accept="image/jpeg,image/png,image/webp" style="display:none;">
+        </div>
+        <div class="field">
+          <label for="f-contact">Contato (WhatsApp) — opcional</label>
+          <input type="text" id="f-contact" placeholder="Deixe em branco para usar o telefone do seu cadastro">
+        </div>
+        <p class="hint">Seu anúncio entra na fila de moderação e aparece no mural após aprovação.</p>
+        <div class="modal-actions" style="margin-top:18px;">
+          <button type="submit" class="btn btn-forest">Publicar doação</button>
+          <button type="button" class="btn btn-ghost" data-close>Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="login-overlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Entrar</h3>
+      <button class="modal-close" data-close>&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="login-form">
+        <div class="field">
+          <label for="l-email">E-mail</label>
+          <input type="email" id="l-email" placeholder="seu@email.com" required>
+        </div>
+        <div class="field">
+          <label for="l-senha">Senha</label>
+          <input type="password" id="l-senha" required>
+        </div>
+        <p class="hint">Ainda não tem conta? <a href="#" id="link-ir-cadastro">Cadastre-se</a>.</p>
+        <div class="modal-actions" style="margin-top:18px;">
+          <button type="submit" class="btn btn-forest">Entrar</button>
+          <button type="button" class="btn btn-ghost" data-close>Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="cadastro-overlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Criar conta</h3>
+      <button class="modal-close" data-close>&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="cadastro-form">
+        <div class="field">
+          <label for="c-nome">Nome</label>
+          <input type="text" id="c-nome" placeholder="Seu nome completo" required>
+        </div>
+        <div class="field">
+          <label for="c-email">E-mail</label>
+          <input type="email" id="c-email" placeholder="seu@email.com" required>
+        </div>
+        <div class="field">
+          <label for="c-telefone">Telefone (WhatsApp)</label>
+          <input type="text" id="c-telefone" placeholder="(32) 9____-____" required>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="c-senha">Senha</label>
+            <input type="password" id="c-senha" required>
+          </div>
+          <div class="field">
+            <label for="c-confirma">Confirmar senha</label>
+            <input type="password" id="c-confirma" required>
+          </div>
+        </div>
+        <p class="hint">Já tem conta? <a href="#" id="link-ir-login">Entrar</a>.</p>
+        <div class="modal-actions" style="margin-top:18px;">
+          <button type="submit" class="btn btn-forest">Criar conta</button>
+          <button type="button" class="btn btn-ghost" data-close>Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="mine-overlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Meus anúncios</h3>
+      <button class="modal-close" data-close>&times;</button>
+    </div>
+    <div class="modal-body" id="mine-body"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span class="dot"></span><span id="toast-text"></span></div>
+
+<script src="js/dados.js"></script>
+<script src="js/api.js"></script>
+<script src="js/utilitarios.js"></script>
+<script src="js/modais.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/meus-anuncios.js"></script>
+<script src="js/mural.js"></script>
+<script src="js/detalhe.js"></script>
+<script src="js/filtros.js"></script>
+<script src="js/formulario.js"></script>
+<script src="js/init-mural.js"></script>
+</body>
+</html>

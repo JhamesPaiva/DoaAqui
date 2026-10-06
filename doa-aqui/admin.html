@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel administrativo — Doa Aqui</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/cabecalho.css">
+<link rel="stylesheet" href="css/modal.css">
+<link rel="stylesheet" href="css/toast.css">
+<link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="css/rodape.css">
+<link rel="stylesheet" href="css/responsivo.css">
+</head>
+<body data-pagina="admin">
+
+<header class="site">
+  <div class="wrap">
+    <a href="index.html" class="logo"><span class="mark">D</span>Doa Aqui</a>
+    <nav class="main">
+      <a href="index.html">Mural</a>
+      <a href="index.html#como-funciona">Como funciona</a>
+      <a href="admin.html" class="active" id="nav-admin">Painel administrativo</a>
+    </nav>
+    <div class="header-actions">
+      <button class="btn btn-gold" id="btn-open-form">Anunciar doação</button>
+      <div class="auth-area" id="auth-area"></div>
+    </div>
+  </div>
+</header>
+
+<section class="admin-section">
+  <div class="wrap">
+    <div class="admin-head">
+      <h2>Painel administrativo</h2>
+      <p>Modere anúncios, acompanhe o status dos itens e veja o impacto do mural.</p>
+    </div>
+    <div class="admin-stats">
+      <div class="admin-stat"><b id="a-stat-pend">—</b><span>aguardando aprovação</span></div>
+      <div class="admin-stat"><b id="a-stat-disp">—</b><span>disponíveis</span></div>
+      <div class="admin-stat"><b id="a-stat-doado">—</b><span>itens já doados</span></div>
+      <div class="admin-stat"><b id="a-stat-total">—</b><span>total publicado</span></div>
+    </div>
+
+    <div class="admin-panel">
+      <div class="admin-panel-head">
+        <h3>Aguardando moderação</h3>
+        <span class="count-badge" id="pending-count">0</span>
+      </div>
+      <table class="admin-table" id="pending-table">
+        <thead><tr><th>Item</th><th>Categoria</th><th>Local</th><th>Ações</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="admin-panel">
+      <div class="admin-panel-head"><h3>Itens publicados</h3></div>
+      <table class="admin-table" id="published-table">
+        <thead><tr><th>Item</th><th>Categoria</th><th>Local</th><th>Status</th><th>Ações</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="admin-panel">
+      <div class="admin-panel-head"><h3>Categorias mais doadas</h3></div>
+      <div class="admin-metric-list" id="top-categories"></div>
+    </div>
+
+    <div class="admin-panel">
+      <div class="admin-panel-head"><h3>Últimas ações de moderação</h3></div>
+      <table class="admin-table" id="log-table">
+        <thead><tr><th>Ação</th><th>Item</th><th>Observação</th><th>Data</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-grid">
+    <div>
+      <h3>Doa Aqui</h3>
+      <p>Mural de doações solidárias desenvolvido como projeto de extensão universitária, aproximando quem quer doar de quem precisa.</p>
+    </div>
+    <div>
+      <h3>Equipe</h3>
+      <ul class="team-list">
+        <li>André de Castro</li>
+        <li>Arthur Belinato</li>
+        <li>Cloviano Albuini</li>
+        <li>Jhames Paiva</li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap foot-bottom">
+    <span>Análise e Desenvolvimento de Sistemas — Extensão Universitária III</span>
+    <span>Protótipo de demonstração, sem envio de dados a servidor</span>
+  </div>
+</footer>
+
+<div class="overlay" id="form-overlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Anunciar uma doação</h3>
+      <button class="modal-close" data-close>&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="new-item-form">
+        <div class="field">
+          <label for="f-title">Nome do item</label>
+          <input type="text" id="f-title" placeholder="Ex: Guarda-roupa 3 portas" required>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="f-category">Categoria</label>
+            <select id="f-category" required>
+              <option value="">Selecione</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-location">Bairro</label>
+            <select id="f-location" required>
+              <option value="">Selecione</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="f-desc">Descrição</label>
+          <textarea id="f-desc" placeholder="Conte o estado do item e detalhes que ajudam quem for buscar" required></textarea>
+        </div>
+        <div class="field">
+          <label for="f-foto">Foto do item — opcional</label>
+          <label class="upload-box" for="f-foto">
+            <b>Arraste uma foto ou clique para escolher</b>
+            <span id="f-foto-hint">JPG, PNG ou WEBP, até 5MB</span>
+          </label>
+          <input type="file" id="f-foto" accept="image/jpeg,image/png,image/webp" style="display:none;">
+        </div>
+        <div class="field">
+          <label for="f-contact">Contato (WhatsApp) — opcional</label>
+          <input type="text" id="f-contact" placeholder="Deixe em branco para usar o telefone do seu cadastro">
+        </div>
+        <p class="hint">Seu anúncio entra na fila de moderação e aparece no mural após aprovação.</p>
+        <div class="modal-actions" style="margin-top:18px;">
+          <button type="submit" class="btn btn-forest">Publicar doação</button>
+          <button type="button" class="btn btn-ghost" data-close>Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="edit-overlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Editar item</h3>
+      <button class="modal-close" data-close>&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="edit-item-form">
+        <input type="hidden" id="e-id">
+        <div class="field">
+          <label for="e-title">Nome do item</label>
+          <input type="text" id="e-title" required>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="e-category">Categoria</label>
+            <select id="e-category" required>
+            </select>
+          </div>
+          <div class="field">
+            <label for="e-location">Bairro</label>
+            <select id="e-location" required>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="e-desc">Descrição</label>
+          <textarea id="e-desc" required></textarea>
+        </div>
+        <div class="field">
+          <label for="e-contact">Contato (WhatsApp)</label>
+          <input type="text" id="e-contact" required>
+        </div>
+        <div class="field">
+          <label for="e-foto">Trocar foto — opcional</label>
+          <label class="upload-box" for="e-foto">
+            <b>Clique para escolher uma nova foto</b>
+            <span id="e-foto-hint">Deixe em branco pra manter a foto atual</span>
+          </label>
+          <input type="file" id="e-foto" accept="image/jpeg,image/png,image/webp" style="display:none;">
+        </div>
+        <div class="modal-actions" style="margin-top:18px;">
+          <button type="submit" class="btn btn-forest">Salvar alterações</button>
+          <button type="button" class="btn btn-ghost" data-close>Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="reject-overlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Rejeitar anúncio</h3>
+      <button class="modal-close" data-close>&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="reject-form">
+        <input type="hidden" id="r-id">
+        <div class="field">
+          <label for="r-obs">Motivo (opcional)</label>
+          <textarea id="r-obs" placeholder="Ex: foto não corresponde ao item, descrição incompleta…"></textarea>
+        </div>
+        <div class="modal-actions" style="margin-top:18px;">
+          <button type="submit" class="btn btn-brick">Confirmar rejeição</button>
+          <button type="button" class="btn btn-ghost" data-close>Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="history-overlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Histórico de status</h3>
+      <button class="modal-close" data-close>&times;</button>
+    </div>
+    <div class="modal-body" id="history-body"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span class="dot"></span><span id="toast-text"></span></div>
+
+<script src="js/dados.js"></script>
+<script src="js/api.js"></script>
+<script src="js/utilitarios.js"></script>
+<script src="js/modais.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/formulario.js"></script>
+<script src="js/admin.js"></script>
+<script src="js/init-admin.js"></script>
+</body>
+</html>

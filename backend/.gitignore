@@ -1,0 +1,5 @@
+.env
+storage/login_throttle/*
+storage/logs/*
+!storage/login_throttle/.gitkeep
+!storage/logs/.gitkeep

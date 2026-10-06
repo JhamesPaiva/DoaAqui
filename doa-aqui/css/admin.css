@@ -1,0 +1,62 @@
+.admin-section{padding:44px 0 70px;}
+  .admin-head{margin-bottom:26px;}
+  .admin-head h2{font-size:26px;}
+  .admin-head p{color:var(--ink-soft);margin:6px 0 0;}
+  .admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:34px;}
+  .admin-stat{background:var(--white);border:1px solid var(--line);padding:18px 20px;}
+  .admin-stat b{display:block;font-family:'Fraunces',serif;font-size:28px;color:var(--forest);}
+  .admin-stat span{font-size:12.5px;color:var(--ink-soft);}
+  .admin-panel{background:var(--white);border:1px solid var(--line);margin-bottom:26px;}
+  .admin-panel-head{
+    padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;
+  }
+  .admin-panel-head h3{font-size:16.5px;}
+  .count-badge{background:var(--brick-pale);color:var(--brick);font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px;}
+  table.admin-table{width:100%;border-collapse:collapse;}
+  table.admin-table th{
+    text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.03em;color:var(--ink-soft);
+    padding:12px 20px;border-bottom:1px solid var(--line);font-weight:600;
+  }
+  table.admin-table td{padding:13px 20px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:middle;}
+  table.admin-table tr:last-child td{border-bottom:none;}
+  .row-item{display:flex;align-items:center;gap:12px;}
+  .row-thumb{width:42px;height:42px;background:var(--paper-alt);flex-shrink:0;overflow:hidden;}
+  .row-thumb img{width:100%;height:100%;object-fit:cover;}
+  .row-actions{display:flex;gap:8px;}
+  .icon-btn{
+    border:1px solid var(--line);background:var(--white);padding:6px 12px;font-size:12.5px;font-weight:600;
+  }
+  .icon-btn.approve{color:var(--forest);border-color:var(--forest);}
+  .icon-btn.approve:hover{background:var(--forest);color:var(--white);}
+  .icon-btn.reject{color:var(--brick);border-color:var(--brick);}
+  .icon-btn.reject:hover{background:var(--brick);color:var(--white);}
+  select.status-select{
+    border:1px solid var(--line);padding:6px 8px;font-family:inherit;font-size:13px;background:var(--paper);
+  }
+  .empty-admin{padding:30px 20px;color:var(--ink-soft);font-size:14px;text-align:center;}
+
+  .icon-btn.edit{color:var(--gray);border-color:var(--gray);}
+  .icon-btn.edit:hover{background:var(--gray);color:var(--white);}
+  .icon-btn.remove{color:var(--brick);border-color:var(--brick);}
+  .icon-btn.remove:hover{background:var(--brick);color:var(--white);}
+  .icon-btn.history{color:var(--forest);border-color:var(--line);}
+  .icon-btn.history:hover{border-color:var(--forest);}
+
+  .admin-metric-list{padding:18px 20px;display:flex;flex-direction:column;gap:10px;}
+  .metric-row{display:flex;align-items:center;gap:12px;}
+  .metric-row .metric-label{width:140px;flex-shrink:0;font-size:13.5px;color:var(--ink);}
+  .metric-row .metric-bar-track{flex:1;height:10px;background:var(--paper-alt);border-radius:20px;overflow:hidden;}
+  .metric-row .metric-bar-fill{height:100%;background:var(--forest);border-radius:20px;}
+  .metric-row .metric-count{width:26px;text-align:right;font-weight:700;color:var(--forest);font-size:13.5px;}
+
+  .acao-badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap;}
+  .acao-badge.Aprovado{background:var(--forest-pale);color:var(--forest);}
+  .acao-badge.Rejeitado{background:var(--brick-pale);color:var(--brick);}
+  .acao-badge.Editado{background:var(--gold-pale);color:#8a6113;}
+  .acao-badge.Removido{background:var(--gray-pale);color:var(--gray);}
+
+  .history-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;}
+  .history-list li{padding:10px 12px;background:var(--paper);border:1px solid var(--line);font-size:13.5px;display:flex;justify-content:space-between;gap:10px;}
+
+  .mine-subtitle{font-size:12.5px;font-weight:700;color:var(--forest);text-transform:uppercase;letter-spacing:.04em;margin:22px 0 10px;}
+  .mine-subtitle:first-child{margin-top:0;}

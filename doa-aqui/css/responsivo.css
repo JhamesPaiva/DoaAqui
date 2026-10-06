@@ -1,0 +1,21 @@
+@media (max-width:920px){
+    .hero-grid{grid-template-columns:1fr;}
+    .steps{grid-template-columns:1fr;}
+    .mural-layout{grid-template-columns:1fr;}
+    .filters{position:static;}
+    .grid{grid-template-columns:repeat(2,1fr);}
+    .admin-stats{grid-template-columns:repeat(2,1fr);}
+    nav.main{display:none;}
+  }
+  @media (max-width:600px){
+    .hero h1{font-size:34px;}
+    .grid{grid-template-columns:1fr;}
+    .field-row{grid-template-columns:1fr;}
+    .admin-stats{grid-template-columns:1fr 1fr;}
+    table.admin-table{font-size:12px;}
+    table.admin-table th:nth-child(3),table.admin-table td:nth-child(3){display:none;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    *{transition:none !important;}
+  }

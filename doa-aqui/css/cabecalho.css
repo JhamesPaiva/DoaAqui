@@ -1,0 +1,46 @@
+header.site{
+    background:var(--forest);
+    color:var(--white);
+    position:sticky;top:0;z-index:40;
+    border-bottom:3px solid var(--gold);
+  }
+  header.site .wrap{
+    display:flex;align-items:center;justify-content:space-between;
+    height:72px;
+  }
+  .logo{
+    display:flex;align-items:center;gap:10px;
+    font-family:'Fraunces',serif;font-weight:700;font-size:22px;color:var(--white);
+    text-decoration:none;
+  }
+  .logo .mark{
+    width:30px;height:30px;border-radius:50%;
+    background:var(--gold);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--forest);font-weight:700;font-size:16px;
+  }
+  nav.main{display:flex;align-items:center;gap:30px;}
+  nav.main a{
+    color:var(--white);text-decoration:none;font-size:15px;font-weight:500;
+    opacity:.88;padding:6px 2px;border-bottom:2px solid transparent;
+  }
+  nav.main a:hover{opacity:1;border-color:var(--gold);}
+  nav.main a.active{opacity:1;border-color:var(--gold);}
+
+  .header-actions{display:flex;align-items:center;gap:18px;}
+
+  .auth-links{display:flex;align-items:center;gap:16px;}
+  .auth-links a{color:var(--white);text-decoration:none;font-size:14px;font-weight:600;opacity:.9;}
+  .auth-links a:hover{opacity:1;text-decoration:underline;}
+
+  .auth-user{display:flex;align-items:center;gap:12px;}
+  .user-chip{
+    display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.14);
+    padding:6px 12px 6px 6px;border-radius:20px;font-size:13.5px;font-weight:600;color:var(--white);
+  }
+  .user-chip .avatar{
+    width:24px;height:24px;border-radius:50%;background:var(--gold);color:var(--forest);
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12.5px;flex-shrink:0;
+  }
+  .link-btn{background:none;border:none;color:var(--white);opacity:.85;font-size:13px;text-decoration:underline;padding:0;}
+  .link-btn:hover{opacity:1;}

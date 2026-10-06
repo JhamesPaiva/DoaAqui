@@ -1,0 +1,173 @@
+==================================================================
+MANUAL DO MODELO ENTIDADE-RELACIONAMENTO (ER)
+Projeto: Doa Aqui - Mural de Doacoes Solidarias
+Extensao Universitaria III - Analise e Desenvolvimento de Sistemas
+==================================================================
+
+1. OBJETIVO DO DOCUMENTO
+------------------------------------------------------------------
+Este manual explica, de forma simples, cada tabela do banco de
+dados do projeto Doa Aqui, seus campos e como elas se relacionam
+entre si. Serve como referencia para quem for implementar o banco
+de dados (MySQL) ou apresentar o modelo no projeto.
+
+
+2. VISAO GERAL
+------------------------------------------------------------------
+O banco possui 7 tabelas:
+
+  1. usuario
+  2. categoria
+  3. bairro
+  4. item
+  5. item_foto
+  6. moderacao
+  7. historico_status
+
+Alem disso, existem 4 ENUMS (listas fixas de valores permitidos):
+
+  - tipo_usuario      -> comum, admin
+  - status_item       -> Disponivel, Reservado, Doado
+  - status_moderacao  -> Pendente, Aprovado, Rejeitado
+  - acao_moderacao    -> Aprovado, Rejeitado, Editado, Removido
+
+
+3. DESCRICAO DAS TABELAS
+------------------------------------------------------------------
+
+3.1 usuario
+   Guarda quem usa o sistema: doadores e administradores.
+   Campos principais:
+     - id_usuario      : identificador unico (PK)
+     - nome            : nome do usuario
+     - email           : usado para login, deve ser unico
+     - senha_hash      : senha criptografada (nunca em texto puro)
+     - telefone_whatsapp : contato padrao do usuario
+     - tipo            : "comum" (doador/interessado) ou "admin"
+     - ativo           : permite desativar conta sem apagar dados
+     - data_cadastro   : data em que o usuario se cadastrou
+
+3.2 categoria
+   Lista as categorias de itens disponiveis para doacao
+   (ex: Roupas, Moveis, Alimentos, Eletronicos, Livros, Brinquedos).
+   Pode ser expandida no futuro pelo administrador.
+   Campos principais:
+     - id_categoria : identificador unico (PK)
+     - nome         : nome da categoria (unico)
+     - descricao    : texto opcional explicando a categoria
+     - ativo        : permite ocultar categoria sem apagar itens
+
+3.3 bairro
+   Lista os bairros usados no filtro de localizacao do mural.
+   Evita erros de digitacao (ex: "Centro" e "centro" virarem
+   registros diferentes).
+   Campos principais:
+     - id_bairro : identificador unico (PK)
+     - nome      : nome do bairro (unico)
+     - ativo     : permite desativar um bairro sem apagar itens
+
+3.4 item
+   Tabela central do sistema: representa cada doacao publicada.
+   Campos principais:
+     - id_item            : identificador unico (PK)
+     - id_usuario_doador  : quem publicou o item (FK -> usuario)
+     - id_categoria       : categoria do item (FK -> categoria)
+     - id_bairro          : localizacao do item (FK -> bairro)
+     - titulo             : nome do item
+     - descricao          : detalhes/estado do item
+     - foto_url           : link da foto (upload ainda nao
+                            implementado no prototipo)
+     - contato_whatsapp   : opcional; se vazio, usa-se o telefone
+                            do proprio usuario doador
+     - status             : Disponivel, Reservado ou Doado
+     - status_moderacao   : Pendente, Aprovado ou Rejeitado
+     - data_publicacao    : data em que o item foi cadastrado
+     - data_atualizacao   : ultima vez que o item foi alterado
+     - removido_em        : preenchido quando o admin remove o
+                            item (soft delete - nao apaga a linha,
+                            so marca como removida)
+
+3.5 item_foto
+   Tabela pensada para o futuro, quando for possivel enviar
+   varias fotos por item (hoje o prototipo so aceita uma).
+   Campos principais:
+     - id_foto     : identificador unico (PK)
+     - id_item     : item ao qual a foto pertence (FK -> item)
+     - foto_url    : endereco da imagem
+     - ordem       : posicao de exibicao da foto
+     - data_upload : data do envio da imagem
+
+3.6 moderacao
+   Registra as acoes do administrador sobre cada anuncio
+   (aprovar, rejeitar, editar ou remover). Funciona como um
+   historico de auditoria da moderacao.
+   Campos principais:
+     - id_moderacao : identificador unico (PK)
+     - id_item      : item que foi moderado (FK -> item)
+     - id_admin     : administrador que fez a acao (FK -> usuario)
+     - acao         : Aprovado, Rejeitado, Editado ou Removido
+     - observacao   : comentario opcional do administrador
+     - data_acao    : quando a acao foi realizada
+
+3.7 historico_status
+   Registra toda mudanca de status de um item (por exemplo,
+   quando o doador marca um item como Reservado ou Doado).
+   Serve para gerar metricas e manter rastreabilidade.
+   Campos principais:
+     - id_historico    : identificador unico (PK)
+     - id_item         : item que mudou de status (FK -> item)
+     - status_anterior : status antes da mudanca
+     - status_novo     : status depois da mudanca
+     - alterado_por    : usuario que fez a alteracao (FK -> usuario)
+     - data_alteracao  : quando a mudanca ocorreu
+
+
+4. RELACIONAMENTOS ENTRE AS TABELAS
+------------------------------------------------------------------
+Todos os relacionamentos abaixo sao do tipo 1:N (um para muitos):
+
+  usuario (1) ---- (N) item
+     Um usuario pode doar varios itens.
+
+  categoria (1) ---- (N) item
+     Uma categoria pode ter varios itens.
+
+  bairro (1) ---- (N) item
+     Um bairro pode ter varios itens cadastrados nele.
+
+  item (1) ---- (N) item_foto
+     Um item pode ter varias fotos.
+
+  item (1) ---- (N) moderacao
+     Um item pode ter varios registros de moderacao ao longo
+     do tempo.
+
+  usuario (1) ---- (N) moderacao
+     Um administrador pode moderar varios itens.
+
+  item (1) ---- (N) historico_status
+     Um item pode ter varias mudancas de status registradas.
+
+  usuario (1) ---- (N) historico_status
+     Um usuario pode ter feito varias alteracoes de status.
+
+
+5. OBSERVACOES IMPORTANTES
+------------------------------------------------------------------
+- Nao existe tabela de "metricas". Os numeros pedidos no
+  requisito RF10 (quantidade de doacoes, itens doados,
+  categorias mais doadas) sao calculados com consultas SQL
+  (COUNT, GROUP BY) em cima da tabela "item", e nao guardados
+  fisicamente no banco.
+
+- O campo "removido_em" em "item" evita que, ao remover um
+  anuncio, os registros ligados a ele em "moderacao" e
+  "historico_status" fiquem orfaos (sem referencia valida).
+
+- Os ENUMS garantem que campos como status e tipo de usuario
+  so aceitem valores validos, evitando erros de digitacao ou
+  inconsistencia no banco.
+
+==================================================================
+FIM DO DOCUMENTO
+==================================================================
