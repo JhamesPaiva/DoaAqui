@@ -1,6 +1,6 @@
 @echo off
 setlocal EnableDelayedExpansion
-title Doa Aqui - Setup e Execucao
+title Doa Aqui - Setup e Execucao..
 cd /d "%~dp0"
 
 echo ================================================================
