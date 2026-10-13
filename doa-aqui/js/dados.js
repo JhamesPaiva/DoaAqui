@@ -1,12 +1,10 @@
-// Placeholders de foto por categoria — o backend ainda não faz upload real (RNF06 fica
-// pra uma próxima fase), então toda foto de item continua sendo um placeholder por categoria.
 const imagensCategoria = {
-  "Roupas": "https://picsum.photos/seed/doaaqui-roupas/600/420",
-  "Móveis": "https://picsum.photos/seed/doaaqui-moveis/600/420",
-  "Alimentos": "https://picsum.photos/seed/doaaqui-alimentos/600/420",
-  "Eletrônicos": "https://picsum.photos/seed/doaaqui-eletro/600/420",
-  "Livros": "https://picsum.photos/seed/doaaqui-livros/600/420",
-  "Brinquedos": "https://picsum.photos/seed/doaaqui-brinquedos/600/420"
+  "Roupas": "assets/roupas.svg",
+  "Móveis": "assets/moveis.svg",
+  "Alimentos": "assets/alimentos.svg",
+  "Eletrônicos": "assets/eletronicos.svg",
+  "Livros": "assets/livros.svg",
+  "Brinquedos": "assets/brinquedos.svg"
 };
 
 // Estado em memória, preenchido pelas chamadas à API nos scripts de inicialização

@@ -31,7 +31,7 @@ document.getElementById("search-form").addEventListener("submit", function (e) {
   e.preventDefault();
   filtroAtual.busca = document.getElementById("search-input").value.trim().toLowerCase();
   desenhaGrade();
-  document.getElementById("mural").scrollIntoView({ behavior: "smooth" });
+  document.getElementById("mural").scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
 });
 
 document.querySelectorAll(".status-filter").forEach(function (cb) {

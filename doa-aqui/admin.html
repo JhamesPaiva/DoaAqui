@@ -4,25 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Painel administrativo — Doa Aqui</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/base.css">
-<link rel="stylesheet" href="css/cabecalho.css">
-<link rel="stylesheet" href="css/modal.css">
-<link rel="stylesheet" href="css/toast.css">
-<link rel="stylesheet" href="css/admin.css">
-<link rel="stylesheet" href="css/rodape.css">
-<link rel="stylesheet" href="css/responsivo.css">
+<meta name="theme-color" content="#1a2039">
+<meta name="description" content="Doe e encontre itens em Muriaé. Conecte-se com sua comunidade pelo DoaAqui.">
+<link rel="icon" href="assets/brand.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/identidade.css">
 </head>
 <body data-pagina="admin">
 
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 <header class="site">
   <div class="wrap">
-    <a href="index.html" class="logo"><span class="mark">D</span>Doa Aqui</a>
-    <nav class="main">
+    <a href="index.html" class="logo"><img class="mark" src="assets/brand.svg" width="36" height="36" alt="">DoaAqui</a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">Menu</button>
+    <nav class="main" id="main-nav" aria-label="Navegação principal">
       <a href="index.html">Mural</a>
       <a href="index.html#como-funciona">Como funciona</a>
-      <a href="admin.html" class="active" id="nav-admin">Painel administrativo</a>
+      <a href="admin.html" class="active" id="nav-admin">Administração</a>
     </nav>
     <div class="header-actions">
       <button class="btn btn-gold" id="btn-open-form">Anunciar doação</button>
@@ -31,10 +28,10 @@
   </div>
 </header>
 
-<section class="admin-section">
+<main id="conteudo" class="admin-section">
   <div class="wrap">
     <div class="admin-head">
-      <h2>Painel administrativo</h2>
+      <h1>Cuidar do mural</h1>
       <p>Modere anúncios, acompanhe o status dos itens e veja o impacto do mural.</p>
     </div>
     <div class="admin-stats">
@@ -44,44 +41,44 @@
       <div class="admin-stat"><b id="a-stat-total">—</b><span>total publicado</span></div>
     </div>
 
-    <div class="admin-panel">
+    <div class="admin-panel" data-ui>
       <div class="admin-panel-head">
         <h3>Aguardando moderação</h3>
         <span class="count-badge" id="pending-count">0</span>
       </div>
-      <table class="admin-table" id="pending-table">
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Tabela administrativa"><table class="admin-table" id="pending-table">
         <thead><tr><th>Item</th><th>Categoria</th><th>Local</th><th>Ações</th></tr></thead>
         <tbody></tbody>
-      </table>
+      </table></div>
     </div>
 
-    <div class="admin-panel">
+    <div class="admin-panel" data-ui>
       <div class="admin-panel-head"><h3>Itens publicados</h3></div>
-      <table class="admin-table" id="published-table">
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Tabela administrativa"><table class="admin-table" id="published-table">
         <thead><tr><th>Item</th><th>Categoria</th><th>Local</th><th>Status</th><th>Ações</th></tr></thead>
         <tbody></tbody>
-      </table>
+      </table></div>
     </div>
 
-    <div class="admin-panel">
+    <div class="admin-panel" data-ui>
       <div class="admin-panel-head"><h3>Categorias mais doadas</h3></div>
       <div class="admin-metric-list" id="top-categories"></div>
     </div>
 
-    <div class="admin-panel">
+    <div class="admin-panel" data-ui>
       <div class="admin-panel-head"><h3>Últimas ações de moderação</h3></div>
-      <table class="admin-table" id="log-table">
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Tabela administrativa"><table class="admin-table" id="log-table">
         <thead><tr><th>Ação</th><th>Item</th><th>Observação</th><th>Data</th></tr></thead>
         <tbody></tbody>
-      </table>
+      </table></div>
     </div>
   </div>
-</section>
+</main>
 
 <footer>
   <div class="wrap footer-grid">
     <div>
-      <h3>Doa Aqui</h3>
+      <a class="footer-wordmark" href="index.html">DoaAqui</a>
       <p>Mural de doações solidárias desenvolvido como projeto de extensão universitária, aproximando quem quer doar de quem precisa.</p>
     </div>
     <div>
@@ -96,7 +93,7 @@
   </div>
   <div class="wrap foot-bottom">
     <span>Análise e Desenvolvimento de Sistemas — Extensão Universitária III</span>
-    <span>Protótipo de demonstração, sem envio de dados a servidor</span>
+    <span>Feito para conectar a comunidade de Muriaé</span>
   </div>
 </footer>
 
@@ -104,7 +101,7 @@
   <div class="modal">
     <div class="modal-head">
       <h3>Anunciar uma doação</h3>
-      <button class="modal-close" data-close>&times;</button>
+      <button class="modal-close" aria-label="Fechar janela" data-close>&times;</button>
     </div>
     <div class="modal-body">
       <form id="new-item-form">
@@ -133,7 +130,7 @@
         <div class="field">
           <label for="f-foto">Foto do item — opcional</label>
           <label class="upload-box" for="f-foto">
-            <b>Arraste uma foto ou clique para escolher</b>
+            <b>Escolha uma foto do item</b>
             <span id="f-foto-hint">JPG, PNG ou WEBP, até 5MB</span>
           </label>
           <input type="file" id="f-foto" accept="image/jpeg,image/png,image/webp" style="display:none;">
@@ -156,7 +153,7 @@
   <div class="modal">
     <div class="modal-head">
       <h3>Editar item</h3>
-      <button class="modal-close" data-close>&times;</button>
+      <button class="modal-close" aria-label="Fechar janela" data-close>&times;</button>
     </div>
     <div class="modal-body">
       <form id="edit-item-form">
@@ -206,7 +203,7 @@
   <div class="modal">
     <div class="modal-head">
       <h3>Rejeitar anúncio</h3>
-      <button class="modal-close" data-close>&times;</button>
+      <button class="modal-close" aria-label="Fechar janela" data-close>&times;</button>
     </div>
     <div class="modal-body">
       <form id="reject-form">
@@ -228,13 +225,13 @@
   <div class="modal">
     <div class="modal-head">
       <h3>Histórico de status</h3>
-      <button class="modal-close" data-close>&times;</button>
+      <button class="modal-close" aria-label="Fechar janela" data-close>&times;</button>
     </div>
     <div class="modal-body" id="history-body"></div>
   </div>
 </div>
 
-<div class="toast" id="toast"><span class="dot"></span><span id="toast-text"></span></div>
+<div class="toast" id="toast" role="status" aria-live="polite"><span class="dot"></span><span id="toast-text"></span></div>
 
 <script src="js/dados.js"></script>
 <script src="js/api.js"></script>
@@ -244,5 +241,6 @@
 <script src="js/formulario.js"></script>
 <script src="js/admin.js"></script>
 <script src="js/init-admin.js"></script>
+<script src="js/interface.js"></script>
 </body>
 </html>
