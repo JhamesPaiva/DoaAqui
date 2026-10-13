@@ -29,7 +29,12 @@ try {
     echo "Banco criado no MySQL $version, porta 3306.\n.env criado e conexão da aplicação verificada ($count categorias).\nDados de demonstração do projeto importados.\nLogin local de teste: admin@doaaqui.com / admin123\n";
 } catch (Throwable $e) {
     if ($e instanceof PDOException) {
-        fwrite(STDERR, "Não foi possível concluir a configuração do MySQL (código ".$e->getCode()."). Confira se o servidor está ativo e a senha do root está correta. Em caso de importação parcial, não apague dados: peça uma verificação.\n");
+        $driverCode = (int)($e->errorInfo[1] ?? 0);
+        if ($driverCode === 1045) {
+            fwrite(STDERR, "Acesso negado pelo MySQL em 127.0.0.1:3306 (erro 1045). O servidor recusou o usuario root com a senha informada, inclusive se deixada vazia. Confira a conexao e a senha usada no MySQL Workbench; ele pode ter uma senha salva.\n");
+        } else {
+            fwrite(STDERR, "Nao foi possivel concluir a configuracao do MySQL (SQLSTATE ".$e->getCode().", erro ".$driverCode."). Confira se o servidor esta ativo. Em caso de importacao parcial, nao apague dados: peca uma verificacao.\n");
+        }
     } else fwrite(STDERR, $e->getMessage()."\n");
     exit(1);
 }

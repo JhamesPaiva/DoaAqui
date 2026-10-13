@@ -4,12 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Doa Aqui — Mural de Doações Solidárias</title>
-<meta name="theme-color" content="#1a2039">
+<meta name="theme-color" content="#BE1768">
 <meta name="description" content="Doe e encontre itens em Muriaé. Conecte-se com sua comunidade pelo DoaAqui.">
 <link rel="icon" href="assets/brand.svg" type="image/svg+xml">
 <link rel="stylesheet" href="css/identidade.css">
+<link rel="stylesheet" href="css/circular.css">
+<link rel="stylesheet" href="css/profile.css">
+<link rel="stylesheet" href="css/form-design.css">
 </head>
-<body>
+<body class="public-page">
 
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 <header class="site">
@@ -17,12 +20,12 @@
     <a href="index.html" class="logo"><img class="mark" src="assets/brand.svg" width="36" height="36" alt="">DoaAqui</a>
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">Menu</button>
     <nav class="main" id="main-nav" aria-label="Navegação principal">
-      <a href="index.html" class="active">Mural</a>
+      <a href="#mural" class="active">Encontrar doações</a>
       <a href="index.html#como-funciona">Como funciona</a>
-      <a href="admin.html" id="nav-admin">Administração</a>
+      <a href="admin.html" id="nav-admin" style="display:none">Administração</a>
     </nav>
     <div class="header-actions">
-      <button class="btn btn-gold" id="btn-open-form">Anunciar doação</button>
+      <button class="btn btn-gold" id="btn-open-form">Quero doar</button>
       <div class="auth-area" id="auth-area"></div>
     </div>
   </div>
@@ -31,22 +34,23 @@
 <main id="conteudo">
 
   <section class="hero" aria-labelledby="hero-title">
-    <div class="wrap">
-      <h1 id="hero-title">Doe aqui.<span class="hero-second"><span class="hero-window"><img src="assets/objetos-doacao.png" alt="" width="1536" height="1024" fetchpriority="high"></span>Viva ali.</span></h1>
-      <div class="hero-bottom"><p class="lead">O que já fez parte da sua casa pode fazer parte de uma nova história. Doe e encontre itens em Muriaé.</p><a class="btn btn-gold hero-action" href="#mural">Explorar doações <span aria-hidden="true">↗</span></a></div>
-      <div class="stat-row" aria-label="Resumo do mural"><div class="stat"><b id="stat-total">—</b><span>itens no mural</span></div><div class="stat"><b id="stat-disponiveis">—</b><span>disponíveis agora</span></div><p>Da sua vizinhança.<br>Para uma nova casa.</p></div>
+    <div class="wrap hero-layout">
+      <div class="hero-copy"><h1 id="hero-title">Doe aqui.<br>Faça circular.</h1><p class="lead">Dê um novo destino ao que você não usa e encontre doações perto de você.</p><div class="hero-buttons"><button type="button" class="btn btn-white" data-donate>Quero doar <span aria-hidden="true">↗</span></button><a class="hero-explore" href="#mural">Encontrar doações <span aria-hidden="true">↓</span></a></div><p class="hero-place">De pessoa para pessoa. Em Muriaé.</p></div>
+      <div class="hero-art"><div class="hero-photo"><img src="assets/objetos-doacao.png" alt="Composição ilustrativa de objetos que podem ganhar uma nova casa" width="1536" height="1024" fetchpriority="high"></div><span class="orbit orbit-one" aria-hidden="true"></span><span class="orbit orbit-two" aria-hidden="true"></span><div class="circle-message" aria-hidden="true">Uma nova<br>história<br><span>começa aqui ↗</span></div></div>
     </div>
   </section>
+  <div class="purpose-band"><p>Um espaço para conectar quem quer doar a quem precisa de um item em <strong>Muriaé.</strong></p></div>
 
   <section class="mural" id="mural">
     <div class="wrap">
       <div class="mural-head">
         <div>
-          <h2>Encontre por aqui</h2>
-          <p id="results-count" role="status" aria-live="polite">Carregando itens…</p>
+          <h2>Encontre sua<br>próxima doação</h2><p class="mural-intro">Um novo começo pode estar mais perto do que você imagina.</p>
+
         </div>
+        <div class="mural-symbol" aria-hidden="true">↗</div>
       </div>
-      <form class="search-box" id="search-form" role="search"><label class="sr-only" for="search-input">Buscar doações</label><input type="search" id="search-input" placeholder="O que você está procurando?" autocomplete="off"><button type="submit">Buscar</button></form>
+      <form class="search-box" id="search-form" role="search"><label class="search-label" for="search-input">Buscar doações</label><input type="search" id="search-input" placeholder="Ex.: livros, cadeira, roupas" autocomplete="off"><button type="submit">Buscar</button></form>
       <div class="mural-layout" data-ui>
         <aside class="filters">
           <h3>Refine sua busca</h3><button type="button" id="filter-toggle" class="filter-toggle" aria-expanded="false">Mostrar filtros</button>
@@ -69,39 +73,40 @@
           <button class="clear-filters" id="clear-filters">Limpar filtros</button>
         </aside>
         <div>
-          <div class="grid" id="items-grid" aria-busy="true"><p class="loading-state">Buscando doações na comunidade…</p></div>
+          <p id="results-count" role="status" aria-live="polite">Carregando itens…</p><div class="grid" id="items-grid" aria-busy="true"><p class="loading-state">Buscando doações na comunidade…</p></div>
         </div>
       </div>
     </div>
   </section>
   <section class="how" id="como-funciona">
     <div class="wrap">
-      <h2>Como funciona</h2>
+      <h2>Uma doação,<br>um novo começo</h2>
       <p class="sub">Do seu armário para a vida de alguém. Você combina tudo diretamente com o doador.</p>
       <figure class="how-photo"><img src="assets/objetos-doacao.png" width="1536" height="1024" alt="Composição ilustrativa de cadeira, roupas, livros e brinquedo, objetos que podem ser doados" loading="lazy"><figcaption>Uma nova história para o que você já tem. Imagem ilustrativa.</figcaption></figure><div class="steps">
         <div class="step">
 
-          <h3>Doe ou encontre</h3>
+          <span class="step-number" aria-hidden="true">1</span><h3>Publique ou encontre</h3>
           <p>Quem tem algo para doar publica o item com foto e descrição. Quem precisa navega pelo mural filtrando por categoria e localização.</p>
         </div>
         <div class="step">
 
-          <h3>Combine a retirada</h3>
+          <span class="step-number" aria-hidden="true">2</span><h3>Combine a retirada</h3>
           <p>Ao encontrar um item, o interessado entra em contato direto com o doador para combinar onde e quando buscar.</p>
         </div>
         <div class="step">
 
-          <h3>Atualize o status</h3>
+          <span class="step-number" aria-hidden="true">3</span><h3>Atualize a doação</h3>
           <p>O doador marca o item como Reservado quando alguém já garantiu e como Doado assim que a entrega acontece.</p>
         </div>
       </div>
     </div>
   </section>
 
+  <section class="donate-close"><div class="wrap"><div><h2>Tem algo parado por aí?</h2><p>Pode ser o que alguém está procurando.</p></div><button class="btn btn-forest" type="button" data-donate>Quero doar <span aria-hidden="true">↗</span></button></div></section>
 </main>
 
 <footer>
-  <div class="wrap footer-grid">
+  <div class="community-count wrap"><span><b id="stat-total">—</b> itens no mural</span><span><b id="stat-disponiveis">—</b> disponíveis agora</span></div><div class="wrap footer-grid">
     <div>
       <a class="footer-wordmark" href="index.html">DoaAqui</a>
       <p>Mural de doações solidárias desenvolvido como projeto de extensão universitária, aproximando quem quer doar de quem precisa.</p>
@@ -116,6 +121,7 @@
       </ul>
     </div>
   </div>
+  <div class="wrap footer-nav"><a href="index.html#mural">Encontrar doações</a><a href="index.html#como-funciona">Como funciona</a></div>
   <div class="wrap foot-bottom">
     <span>Análise e Desenvolvimento de Sistemas — Extensão Universitária III</span>
     <span>Feito para conectar a comunidade de Muriaé</span>
@@ -135,7 +141,7 @@
 <div class="overlay" id="form-overlay">
   <div class="modal">
     <div class="modal-head">
-      <h3>Anunciar uma doação</h3>
+      <h3>Publicar uma doação</h3>
       <button class="modal-close" aria-label="Fechar janela" data-close>&times;</button>
     </div>
     <div class="modal-body">
@@ -168,7 +174,7 @@
             <b>Escolha uma foto do item</b>
             <span id="f-foto-hint">JPG, PNG ou WEBP, até 5MB</span>
           </label>
-          <input type="file" id="f-foto" accept="image/jpeg,image/png,image/webp" style="display:none;">
+          <input type="file" id="f-foto" accept="image/jpeg,image/png,image/webp" class="file-input">
         </div>
         <div class="field">
           <label for="f-contact">Contato (WhatsApp) — opcional</label>
@@ -253,7 +259,7 @@
 <div class="overlay" id="mine-overlay">
   <div class="modal">
     <div class="modal-head">
-      <h3>Meus anúncios</h3>
+      <h3>Minhas doações</h3>
       <button class="modal-close" aria-label="Fechar janela" data-close>&times;</button>
     </div>
     <div class="modal-body" id="mine-body"></div>
@@ -273,6 +279,7 @@
 <script src="js/filtros.js"></script>
 <script src="js/formulario.js"></script>
 <script src="js/init-mural.js"></script>
+<script src="js/form-design.js"></script>
 <script src="js/interface.js"></script>
 </body>
 </html>

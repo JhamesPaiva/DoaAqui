@@ -11,6 +11,8 @@
   desenhaGrade();
 
   var params = new URLSearchParams(window.location.search);
+  if (params.get('perfil') === '1') { if (sessao) { window.location.replace('perfil.html'); return; } abreLogin(); }
+  if (params.get('minhas') === '1') { if (sessao) await abreMeusAnuncios(); else abreLogin(); }
   if (params.get("login") === "admin") {
     mostraAviso("Faça login como administrador para acessar o painel.");
     abreLogin();

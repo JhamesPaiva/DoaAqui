@@ -217,18 +217,45 @@ document.getElementById("edit-item-form").addEventListener("submit", async funct
   mostraAviso('"' + dados.titulo + '" atualizado.');
 });
 
-async function removeItem(id) {
-  var it = buscaPorId(publicadosAtuais, id, "id_item");
+var itemParaRemover = null;
+var removendoAnuncio = false;
+function removeItem(id) {
+  if (removendoAnuncio) return;
+  var it = buscaPorId(publicadosAtuais, id, 'id_item');
   if (!it) return;
-  var confirmado = window.confirm('Remover "' + it.titulo + '" do mural? O item sai de circulação, mas o histórico é mantido.');
-  if (!confirmado) return;
-
-  var resposta = await apiFetch("/admin/remover.php", { metodo: "POST", corpo: { id: id } });
-  if (!resposta.ok) { mostraAviso(resposta.erro); return; }
-
-  await carregarEDesenhaAdmin();
-  mostraAviso('"' + it.titulo + '" removido do mural.');
+  itemParaRemover = {id:id, titulo:it.titulo};
+  document.getElementById('remove-item-title').textContent = it.titulo;
+  document.getElementById('remove-error').hidden = true;
+  document.getElementById('remove-overlay').classList.add('open');
 }
+
+document.getElementById('confirm-remove').addEventListener('click', async function () {
+  if (!itemParaRemover || removendoAnuncio) return;
+  var item = itemParaRemover;
+  var button = this;
+  var error = document.getElementById('remove-error');
+  var dialog = document.querySelector('#remove-overlay .modal');
+  removendoAnuncio = true;
+  button.disabled = true;
+  button.textContent = 'Removendo…';
+  dialog.setAttribute('aria-busy','true');
+  error.hidden = true;
+  try {
+    var resposta = await apiFetch('/admin/remover.php', {metodo:'POST', corpo:{id:item.id}});
+    if (!resposta.ok) {error.textContent=resposta.erro;error.hidden=false;return;}
+    document.getElementById('remove-overlay').classList.remove('open');
+    itemParaRemover = null;
+    await carregarEDesenhaAdmin();
+    mostraAviso('"' + item.titulo + '" removido do mural.');
+    var heading = document.querySelector('.admin-head h1');
+    heading.tabIndex=-1;heading.focus();
+  } finally {
+    removendoAnuncio = false;
+    button.disabled = false;
+    button.textContent = 'Sim, remover anúncio';
+    dialog.removeAttribute('aria-busy');
+  }
+});
 
 async function abreHistorico(id) {
   var it = buscaPorId(publicadosAtuais, id, "id_item");

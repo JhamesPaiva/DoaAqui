@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meu perfil — DoaAqui</title>
+<meta name="theme-color" content="#BE1768">
+<meta name="description" content="Doe e encontre itens em Muriaé. Conecte-se com sua comunidade pelo DoaAqui.">
+<link rel="icon" href="assets/brand.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/identidade.css">
+<link rel="stylesheet" href="css/circular.css">
+<link rel="stylesheet" href="css/profile.css">
+</head>
+<body data-pagina="perfil"><a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<header class="site">
+  <div class="wrap">
+    <a href="index.html" class="logo"><img class="mark" src="assets/brand.svg" width="36" height="36" alt="">DoaAqui</a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">Menu</button>
+    <nav class="main" id="main-nav" aria-label="Navegação principal">
+      <a href="index.html#mural">Encontrar doações</a>
+      <a href="index.html#como-funciona">Como funciona</a>
+      <a href="admin.html" id="nav-admin" style="display:none">Administração</a>
+    </nav>
+    <div class="header-actions">
+      <a class="btn btn-gold" href="index.html">Explorar mural</a>
+      <div class="auth-area" id="auth-area"></div>
+    </div>
+  </div>
+</header>
+<main id="conteudo" class="profile-page"><div class="wrap">
+<div class="profile-heading"><a href="index.html">← Voltar ao mural</a><h1>Meu perfil</h1><p>Seu espaço na comunidade DoaAqui.</p></div>
+<p id="profile-state" role="status">Carregando suas informações…</p>
+<div id="profile-content" class="profile-layout" hidden>
+<aside class="profile-identity"><div id="profile-avatar" class="profile-avatar" aria-hidden="true"></div><h2 id="profile-name"></h2><p id="profile-type"></p><p class="profile-message">Cada doação abre espaço para uma nova história. Obrigado por fazer parte.</p></aside>
+<div><section class="profile-details" aria-labelledby="details-title"><h2 id="details-title">Informações da conta</h2><p>Estes são os dados do seu cadastro.</p><dl class="profile-information"><div class="wide"><dt>Nome completo</dt><dd id="profile-fullname"></dd></div><div class="wide"><dt>E-mail</dt><dd id="profile-email"></dd></div><div class="wide"><dt>Telefone / WhatsApp</dt><dd id="profile-phone"></dd></div></dl></section>
+<section class="profile-activity" aria-labelledby="activity-title"><h2 id="activity-title">Suas doações</h2><div class="profile-stats"><div><b id="profile-pending">—</b><span>Aguardando aprovação</span></div><div><b id="profile-published">—</b><span>Anúncios publicados</span></div><div><b id="profile-donated">—</b><span>Marcados como doados</span></div></div><p id="profile-stats-note" class="profile-note">Resumo dos seus anúncios não excluídos.</p></section>
+<div class="profile-actions"><a class="btn btn-forest" href="index.html?minhas=1">Gerenciar minhas doações</a><a class="btn btn-ghost" href="admin.html" id="profile-admin" hidden>Abrir administração</a></div></div>
+</div></div></main>
+<footer>
+  <div class="wrap footer-grid">
+    <div>
+      <a class="footer-wordmark" href="index.html">DoaAqui</a>
+      <p>Mural de doações solidárias desenvolvido como projeto de extensão universitária, aproximando quem quer doar de quem precisa.</p>
+    </div>
+    <div>
+      <h3>Equipe</h3>
+      <ul class="team-list">
+        <li>André de Castro</li>
+        <li>Arthur Belinato</li>
+        <li>Cloviano Albuini</li>
+        <li>Jhames Paiva</li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap footer-nav"><a href="index.html#mural">Encontrar doações</a><a href="index.html#como-funciona">Como funciona</a></div>
+  <div class="wrap foot-bottom">
+    <span>Análise e Desenvolvimento de Sistemas — Extensão Universitária III</span>
+    <span>Feito para conectar a comunidade de Muriaé</span>
+  </div>
+</footer>
+<script src="js/dados.js"></script><script src="js/api.js"></script><script src="js/auth.js"></script><script src="js/perfil.js"></script></body></html>

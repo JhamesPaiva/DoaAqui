@@ -146,6 +146,14 @@ class ItemService
         return $dados;
     }
 
+    public function removerPublicadoProprio(int $idItem, int $idUsuario): array
+    {
+        if (!$this->itens->removerPublicadoDoUsuario($idItem, $idUsuario)) {
+            return ['ok' => false, 'erro' => 'Anúncio não encontrado entre suas doações publicadas.'];
+        }
+        return ['ok' => true];
+    }
+
     public function cancelarPendente(int $idItem, int $idUsuario): array
     {
         $cancelado = $this->itens->cancelarPendenteDoUsuario($idItem, $idUsuario);

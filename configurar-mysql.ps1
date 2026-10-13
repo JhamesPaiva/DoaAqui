@@ -21,12 +21,29 @@ try {
         $start.UseShellExecute = $false
         $start.CreateNoWindow = $true
         $start.RedirectStandardInput = $true
-        $start.StandardInputEncoding = [Text.UTF8Encoding]::new($false)
+        $start.RedirectStandardOutput = $true
+        $start.RedirectStandardError = $true
+        $start.StandardOutputEncoding = [Text.UTF8Encoding]::new($false)
+        $start.StandardErrorEncoding = [Text.UTF8Encoding]::new($false)
         $process = [Diagnostics.Process]::Start($start)
-        $process.StandardInput.WriteLine((@{ password=$plainPassword } | ConvertTo-Json -Compress))
+        $outputTask = $process.StandardOutput.ReadToEndAsync()
+        $errorTask = $process.StandardError.ReadToEndAsync()
+        # Windows PowerShell 5.1 lacks ProcessStartInfo.StandardInputEncoding.
+        # Write UTF-8 bytes directly so empty and non-ASCII passwords work alike.
+        $payload = [Text.UTF8Encoding]::new($false).GetBytes((@{ password=$plainPassword } | ConvertTo-Json -Compress))
+        try {
+            $process.StandardInput.BaseStream.Write($payload, 0, $payload.Length)
+            $process.StandardInput.BaseStream.Flush()
+        } finally {
+            [Array]::Clear($payload, 0, $payload.Length)
+        }
         $process.StandardInput.Close()
         $plainPassword = $null
         $process.WaitForExit()
+        $outputText = $outputTask.GetAwaiter().GetResult()
+        $errorText = $errorTask.GetAwaiter().GetResult()
+        if (-not [string]::IsNullOrWhiteSpace($outputText)) { Write-Host $outputText.TrimEnd() }
+        if (-not [string]::IsNullOrWhiteSpace($errorText)) { Write-Host $errorText.TrimEnd() -ForegroundColor Red }
         if ($process.ExitCode -ne 0) { throw 'Configuracao nao concluida. Veja a mensagem acima.' }
         Write-Host 'Configuracao concluida. Atualize a lista de schemas no Workbench para ver doaaqui.' -ForegroundColor Green
     } finally {

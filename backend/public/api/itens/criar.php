@@ -19,6 +19,7 @@ $dados = [
     'bairro' => Request::texto('bairro'),
     'descricao' => Request::texto('descricao'),
     'contato' => Request::texto('contato'),
+    'fotoUrl' => Request::texto('fotoUrl'),
 ];
 
 $resultado = (new ItemService())->publicar($usuario, $dados);

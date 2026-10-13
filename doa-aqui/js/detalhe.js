@@ -21,7 +21,7 @@ function abreDetalhe(id) {
       '<div><b>' + it.contato + '</b>Contato</div>' +
     '</div>' +
     '<div class="modal-actions">' +
-      '<a class="btn btn-forest" href="https://wa.me/55' + it.contato.replace(/\D/g, '') + '" target="_blank" rel="noopener">Tenho interesse — chamar no WhatsApp</a>' +
+      (it.status === 'Disponível' && it.contato ? '<a class="btn btn-forest" href="https://wa.me/55' + it.contato.replace(/\D/g, '') + '" target="_blank" rel="noopener">Conversar pelo WhatsApp</a>' : '<p class="hint">' + (it.status === 'Reservado' ? 'Este item está reservado.' : it.status === 'Doado' ? 'Este item já encontrou uma nova casa.' : 'Contato não informado.') + '</p>') +
     '</div>';
 
   document.getElementById("detail-overlay").classList.add("open");

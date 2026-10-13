@@ -4,10 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Painel administrativo — Doa Aqui</title>
-<meta name="theme-color" content="#1a2039">
+<meta name="theme-color" content="#BE1768">
 <meta name="description" content="Doe e encontre itens em Muriaé. Conecte-se com sua comunidade pelo DoaAqui.">
 <link rel="icon" href="assets/brand.svg" type="image/svg+xml">
 <link rel="stylesheet" href="css/identidade.css">
+<link rel="stylesheet" href="css/circular.css">
+<link rel="stylesheet" href="css/profile.css">
+<link rel="stylesheet" href="css/form-design.css">
 </head>
 <body data-pagina="admin">
 
@@ -19,10 +22,10 @@
     <nav class="main" id="main-nav" aria-label="Navegação principal">
       <a href="index.html">Mural</a>
       <a href="index.html#como-funciona">Como funciona</a>
-      <a href="admin.html" class="active" id="nav-admin">Administração</a>
+      <a href="admin.html" class="active" id="nav-admin" style="display:none">Administração</a>
     </nav>
     <div class="header-actions">
-      <button class="btn btn-gold" id="btn-open-form">Anunciar doação</button>
+      <button class="btn btn-gold" id="btn-open-form">Quero doar</button>
       <div class="auth-area" id="auth-area"></div>
     </div>
   </div>
@@ -91,6 +94,7 @@
       </ul>
     </div>
   </div>
+  <div class="wrap footer-nav"><a href="index.html#mural">Encontrar doações</a><a href="index.html#como-funciona">Como funciona</a></div>
   <div class="wrap foot-bottom">
     <span>Análise e Desenvolvimento de Sistemas — Extensão Universitária III</span>
     <span>Feito para conectar a comunidade de Muriaé</span>
@@ -100,7 +104,7 @@
 <div class="overlay" id="form-overlay">
   <div class="modal">
     <div class="modal-head">
-      <h3>Anunciar uma doação</h3>
+      <h3>Publicar uma doação</h3>
       <button class="modal-close" aria-label="Fechar janela" data-close>&times;</button>
     </div>
     <div class="modal-body">
@@ -133,7 +137,7 @@
             <b>Escolha uma foto do item</b>
             <span id="f-foto-hint">JPG, PNG ou WEBP, até 5MB</span>
           </label>
-          <input type="file" id="f-foto" accept="image/jpeg,image/png,image/webp" style="display:none;">
+          <input type="file" id="f-foto" accept="image/jpeg,image/png,image/webp" class="file-input">
         </div>
         <div class="field">
           <label for="f-contact">Contato (WhatsApp) — opcional</label>
@@ -231,6 +235,19 @@
   </div>
 </div>
 
+<div class="overlay" id="remove-overlay">
+  <div class="modal removal-dialog" aria-describedby="remove-explanation">
+    <div class="modal-head"><h3>Remover este anúncio?</h3><button type="button" class="modal-close" aria-label="Fechar confirmação" data-close>&times;</button></div>
+    <div class="modal-body">
+      <div class="removal-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 14h10l1-14M10 11v6m4-6v6"/></svg></div>
+      <p class="removal-label">Anúncio selecionado</p><p id="remove-item-title" class="removal-item"></p>
+      <p id="remove-explanation">O anúncio deixará de aparecer no mural e em Minhas doações. O histórico será preservado.</p>
+      <p id="remove-error" class="form-feedback" role="alert" hidden></p>
+      <div class="modal-actions"><button type="button" class="btn btn-ghost" data-close>Manter anúncio</button><button type="button" class="btn btn-brick" id="confirm-remove">Sim, remover anúncio</button></div>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast" role="status" aria-live="polite"><span class="dot"></span><span id="toast-text"></span></div>
 
 <script src="js/dados.js"></script>
@@ -241,6 +258,7 @@
 <script src="js/formulario.js"></script>
 <script src="js/admin.js"></script>
 <script src="js/init-admin.js"></script>
+<script src="js/form-design.js"></script>
 <script src="js/interface.js"></script>
 </body>
 </html>

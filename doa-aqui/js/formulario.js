@@ -65,7 +65,12 @@ document.getElementById("new-item-form").addEventListener("submit", async functi
   if (typeof exigirLogin === "function" && !exigirLogin()) return;
 
   var dados = leFormularioNovoItem();
-  var publicado = await publicaItem(dados);
+  var submitButton = e.target.querySelector("button[type=submit]");
+  if (submitButton.disabled) return;
+  submitButton.disabled = true;
+  submitButton.textContent = "Publicando…";
+  var publicado;
+  try { publicado = await publicaItem(dados); } finally { submitButton.disabled = false; submitButton.textContent = "Publicar doação"; }
   if (!publicado) return;
 
   e.target.reset();

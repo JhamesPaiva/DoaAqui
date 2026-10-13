@@ -120,6 +120,18 @@ class ItemRepository
     }
 
     /** Soft delete — nunca apaga a linha, só marca removido_em (preserva moderação/histórico). */
+    /** Retira o anúncio de circulação sem apagar fotos ou histórico. */
+    public function removerPublicadoDoUsuario(int $id, int $idUsuario): bool
+    {
+        $stmt = Conexao::obter()->prepare(
+            'UPDATE item SET removido_em = NOW()
+             WHERE id_item = :id AND id_usuario_doador = :usuario
+               AND status_moderacao = "Aprovado" AND removido_em IS NULL'
+        );
+        $stmt->execute(['id' => $id, 'usuario' => $idUsuario]);
+        return $stmt->rowCount() === 1;
+    }
+
     public function remover(int $id): void
     {
         $pdo = Conexao::obter();
