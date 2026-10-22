@@ -6,11 +6,14 @@
 <title>Doa Aqui — Mural de Doações Solidárias</title>
 <meta name="theme-color" content="#BE1768">
 <meta name="description" content="Doe e encontre itens em Muriaé. Conecte-se com sua comunidade pelo DoaAqui.">
+<script src="js/theme.js"></script>
 <link rel="icon" href="assets/brand.svg" type="image/svg+xml">
 <link rel="stylesheet" href="css/identidade.css">
 <link rel="stylesheet" href="css/circular.css">
 <link rel="stylesheet" href="css/profile.css">
 <link rel="stylesheet" href="css/form-design.css">
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/polish-ui.css">
 </head>
 <body class="public-page">
 
@@ -27,6 +30,7 @@
     <div class="header-actions">
       <button class="btn btn-gold" id="btn-open-form">Quero doar</button>
       <div class="auth-area" id="auth-area"></div>
+      <button type="button" id="theme-toggle" class="theme-toggle" role="switch" aria-checked="false" aria-label="Tema escuro" title="Ativar tema escuro" hidden><span class="theme-toggle-thumb" aria-hidden="true"></span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.5A9 9 0 0 1 8.5 4 9 9 0 1 0 20 15.5Z"/></svg></button>
     </div>
   </div>
 </header>
@@ -73,7 +77,7 @@
           <button class="clear-filters" id="clear-filters">Limpar filtros</button>
         </aside>
         <div>
-          <p id="results-count" role="status" aria-live="polite">Carregando itens…</p><div class="grid" id="items-grid" aria-busy="true"><p class="loading-state">Buscando doações na comunidade…</p></div>
+          <p id="results-count" role="status" aria-live="polite">Carregando itens…</p><div id="active-filters" class="active-filters" aria-label="Filtros aplicados" hidden></div><div class="grid" id="items-grid" aria-busy="true"><div class="skeleton-card" aria-hidden="true"><div class="skeleton-photo"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div><div class="skeleton-card" aria-hidden="true"><div class="skeleton-photo"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div><div class="skeleton-card" aria-hidden="true"><div class="skeleton-photo"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div></div>
         </div>
       </div>
     </div>
@@ -280,6 +284,7 @@
 <script src="js/formulario.js"></script>
 <script src="js/init-mural.js"></script>
 <script src="js/form-design.js"></script>
+<script src="js/polish-ui.js"></script>
 <script src="js/interface.js"></script>
 </body>
 </html>

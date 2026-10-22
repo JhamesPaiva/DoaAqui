@@ -1,0 +1,8 @@
+# Arquivos locais do sistema e das ferramentas
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.taste-skill/
+.playwright/
+.playwright-cli/

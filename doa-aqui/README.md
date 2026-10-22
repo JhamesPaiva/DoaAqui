@@ -73,7 +73,7 @@ Principais decisões de modelagem:
 Os arquivos de modelagem estão disponíveis em [`/database`](./database) (cópia de
 referência) e em [`/backend/database`](../backend/database) (a que o back-end usa de fato):
 - `doaaqui.dbml` — código-fonte do modelo, pronto para importar no dbdiagram.io
-- `doaaqui_schema.sql` / `schema.sql` — script de criação do banco (MySQL 8+)
+- `../docs/academico/doaaqui_schema.sql` / `../backend/database/schema.sql` — script de criação do banco (MySQL 8+)
 
 ---
 
@@ -140,3 +140,14 @@ O passo a passo de banco de dados (schema, seed, credenciais de teste) está no
 ## 📄 Licença
 
 Este projeto foi desenvolvido para fins acadêmicos como parte da disciplina de Extensão Universitária III. Sinta-se livre para estudar, adaptar e reutilizar o código para fins educacionais.
+
+## Organização atual da interface
+
+- `index.html`: mural, filtros, login, cadastro e criação de doações.
+- `admin.html`: moderação e edição.
+- `perfil.html`: informações da conta, foto e exclusão.
+- `assets/`: imagens e ícones utilizados pela interface.
+- `css/`: seis folhas ativas (base visual, identidade circular, formulários, perfil, temas e interações).
+- `js/`: módulos por responsabilidade; a ordem de carregamento nas páginas deve ser preservada.
+
+Consulte [arquitetura](../docs/ARQUITETURA.md) e [documentação de design](../docs/design/README.md). O material acadêmico está em [docs/academico](../docs/academico/README.md), fora da pasta servida pelo frontend.

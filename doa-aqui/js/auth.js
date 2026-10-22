@@ -89,7 +89,7 @@ function atualizaCabecalho() {
         (mostraMeusAnuncios ? '<button type="button" class="link-btn" id="btn-mine">Minhas doações</button>' : '') +
         '<button type="button" class="link-btn" id="btn-logout">Sair</button>' +
       '</div>';
-    cont.querySelector('.profile-link .avatar').textContent = inicial;
+    renderProfileAvatar(cont.querySelector('.profile-link .avatar'), sessao);
     cont.querySelector('.profile-shortname').textContent = primeiroNome;
     cont.querySelector('.profile-link').title = 'Perfil de ' + sessao.nome;
     document.getElementById("btn-logout").addEventListener("click", sairUsuario);
@@ -168,4 +168,13 @@ if (linkIrCadastro) {
 var linkIrLogin = document.getElementById("link-ir-login");
 if (linkIrLogin) {
   linkIrLogin.addEventListener("click", function (e) { e.preventDefault(); fechaModais(); abreLogin(); });
+}
+
+function renderProfileAvatar(element, user) {
+  element.textContent = user.nome.trim().charAt(0).toUpperCase();
+  if (!/^\/uploads\/[a-f0-9]{32}\.(jpg|jpeg|png|webp)$/.test(user.fotoUrl || '')) return;
+  var image = document.createElement('img');
+  image.src = UPLOADS_BASE + user.fotoUrl; image.alt = '';
+  image.addEventListener('error', function () { element.textContent = user.nome.trim().charAt(0).toUpperCase(); });
+  element.replaceChildren(image);
 }

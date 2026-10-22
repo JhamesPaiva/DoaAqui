@@ -44,6 +44,7 @@ class Auth
             'email' => $usuario['email'],
             'telefone' => $usuario['telefone_whatsapp'],
             'tipo' => $usuario['tipo'],
+            'fotoUrl' => \DoaAqui\Services\ProfilePhotoService::obter((int) $usuario['id_usuario']),
         ];
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     }
@@ -70,7 +71,16 @@ class Auth
 
     public static function usuarioLogado(): ?array
     {
-        return $_SESSION['usuario'] ?? null;
+        $sessao = $_SESSION['usuario'] ?? null;
+        if (!$sessao) return null;
+        $usuario = (new \DoaAqui\Repositories\UsuarioRepository())->buscarPorId((int) $sessao['id']);
+        if (!$usuario || !$usuario['ativo']) {
+            $_SESSION = [];
+            return null;
+        }
+        $sessao['fotoUrl'] = \DoaAqui\Services\ProfilePhotoService::obter((int) $usuario['id_usuario']);
+        $sessao['tipo'] = $usuario['tipo'];
+        return $sessao;
     }
 
     /** Garante que existe sessão ativa; encerra a requisição com 401 se não houver. */

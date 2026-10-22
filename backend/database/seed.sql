@@ -40,3 +40,5 @@ VALUES
   (2, 2, 1, 'Fogão 4 bocas', 'Usado, funcionando, poucas marcas de uso.', 'Disponivel', 'Aprovado'),
   (3, 1, 2, 'Casacos infantis', 'Tamanhos 4 a 8, bom estado.', 'Reservado', 'Aprovado'),
   (2, 3, 1, 'Cesta de alimentos', 'Itens não perecíveis, retirar até sexta.', 'Disponivel', 'Pendente');
+
+-- Após este seed, aplique bairros-muriae.sql para completar o catálogo.

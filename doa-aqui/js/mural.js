@@ -44,6 +44,7 @@ function desenhaGrade() {
   var grade = document.getElementById("items-grid");
   grade.setAttribute("aria-busy", "false");
   var lista = itensFiltrados();
+  if (typeof desenhaFiltrosAtivos === "function") desenhaFiltrosAtivos();
   var contador = document.getElementById("results-count");
 
   if (erroMural) {
@@ -70,21 +71,23 @@ function desenhaGrade() {
   if (lista.length === 0) {
     grade.innerHTML = '<div class="empty-state"><b>Nada por aqui ainda</b>Tente ajustar os filtros ou volte mais tarde — novas doações podem aparecer a qualquer momento.</div>';
   } else {
-    var html = "";
-    for (var i = 0; i < lista.length; i++) {
-      var it = lista[i];
-      html += '<article class="card" role="button" tabindex="0" aria-haspopup="dialog" data-id="' + it.id + '">';
-      html += '<div class="photo">';
-      html += '<img src="' + it.img + '" alt="' + it.titulo + '" loading="lazy">';
-      if (it.novo) html += '<span class="new-badge">Novo</span>';
-      html += '<span class="status-tag ' + classeStatus(it.status) + '">' + it.status + '</span>';
-      html += '</div>';
-      html += '<div class="body"><span class="cat-label">' + it.categoria + '</span>';
-      html += '<h3>' + it.titulo + '</h3>';
-      html += '<p class="desc">' + it.desc + '</p>';
-      html += '<div class="meta"><span>' + it.local + '</span><span>' + it.data + '</span></div><span class="card-link">Ver doação</span></div></article>';
-    }
-    grade.innerHTML = html;
+    grade.replaceChildren();
+    lista.forEach(function(it,index){
+      var card=document.createElement('article');card.className='card';card.setAttribute('role','button');card.tabIndex=0;card.setAttribute('aria-haspopup','dialog');card.setAttribute('aria-label','Ver doação: '+it.titulo);card.dataset.id=it.id;card.style.setProperty('--arrival-delay',Math.min(index,4)*25+'ms');
+      var photo=document.createElement('div');photo.className='photo';
+      var image=document.createElement('img');image.src=it.img;image.alt=it.titulo;image.loading='lazy';image.width=480;image.height=360;
+      image.addEventListener('error',function(){image.src=imagensCategoria[it.categoria]||imagensCategoria['Móveis'];},{once:true});
+      var status=document.createElement('span');status.className='status-tag '+classeStatus(it.status);status.textContent=it.status;photo.append(image,status);
+      var body=document.createElement('div');body.className='body';
+      var category=document.createElement('span');category.className='cat-label';category.textContent=it.categoria;
+      var title=document.createElement('h3');title.textContent=it.titulo;
+      var desc=document.createElement('p');desc.className='desc';desc.textContent=it.desc;
+      var meta=document.createElement('div');meta.className='meta';
+      var location=document.createElement('span');location.className='card-location';location.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2"/></svg>';location.append(document.createTextNode(it.local));
+      var date=document.createElement('span');date.className='card-date';date.textContent=it.data ? 'Publicado em '+it.data : '';
+      meta.append(location,date);var link=document.createElement('span');link.className='card-link';link.textContent='Ver doação';
+      body.append(category,title,desc,meta,link);card.append(photo,body);grade.append(card);
+    });
   }
 
   grade.querySelectorAll(".card").forEach(function (card) {

@@ -6,7 +6,7 @@ só a biblioteca padrão do PHP + PDO.
 
 ## Requisitos
 
-- PHP 8.1 ou superior, com as extensões `pdo_mysql` e `mbstring`
+- PHP 8.1 ou superior, com as extensões `pdo_mysql`, `mbstring` e `fileinfo`
 - MySQL 8+ ou MariaDB 10.6+
 - Um servidor web (Apache/Nginx) **ou**, para desenvolvimento local, o servidor
   embutido do PHP (`php -S`)
@@ -26,7 +26,7 @@ backend/
 ├── public/                → ÚNICO diretório que deve ficar acessível pela internet
 │   └── api/               → os endpoints de fato
 └── database/
-    ├── schema.sql          → script de criação (já vem com um seed de exemplo simples)
+    ├── schema.sql          → script de criação das tabelas, sem dados
     └── seed.sql            → dados de teste com senhas reais (bcrypt)
 ```
 
@@ -57,10 +57,11 @@ e `database/` não podem ser acessíveis por URL.
    ```bash
    mysql --default-character-set=utf8mb4 -u root < database/schema.sql
    mysql --default-character-set=utf8mb4 -u root doaaqui < database/seed.sql
+   mysql --default-character-set=utf8mb4 -u root doaaqui < database/bairros-muriae.sql
    ```
    `schema.sql` é só a criação das tabelas (sem dado nenhum). O seed de exemplo
    *original* que veio junto do schema entregue (com hashes de senha falsos, só
-   estrutural) está preservado à parte em `database/schema_seed_exemplo_original.sql`,
+   estrutural) está preservado à parte em `../docs/academico/historico/schema_seed_exemplo_original.sql`,
    caso você queira comparar — não use os dois seeds juntos.
 
 4. Suba o servidor embutido do PHP apontando pra `public/`. **Importante:** o
@@ -104,16 +105,9 @@ e `database/` não podem ser acessíveis por URL.
 
 | Validação real de tipo de arquivo (finfo + getimagesize, nunca a extensão/Content-Type do cliente), nome gerado no servidor, pasta de upload sem execução de script | `UploadService`, `public/uploads/.htaccess` | Impede upload de arquivo disfarçado de imagem, path traversal e execução de script via upload |
 
-Tudo isso foi testado de verdade (não só lido no código) rodando MariaDB + PHP
-localmente: cadastro, login, throttle de força bruta, CSRF, tentativa de SQL
-injection, cabeçalhos de resposta, upload de imagem válida e rejeição de arquivo
-inválido/grande demais — todos com resultado conferido via `curl`.
-
 ## Endpoints disponíveis
 
-Toda resposta é JSON. Rotas que alteram dado exigem sessão ativa (cookie) e,
-a partir da segunda requisição, o cabeçalho `X-CSRF-Token` com o valor que veio
-em `csrfToken` na resposta do cadastro/login/`me`.
+Toda resposta é JSON. Exceto cadastro e login, rotas que alteram dados exigem sessão e token CSRF obtido em cadastro/login/me.
 
 | Método | Rota | Autenticação | Descrição |
 |---|---|---|---|
@@ -125,6 +119,9 @@ em `csrfToken` na resposta do cadastro/login/`me`.
 | POST | `/api/auth/cadastro.php` | — | Cria conta (`tipo: comum`) e já loga |
 | POST | `/api/auth/login.php` | — | Login por e-mail/senha |
 | POST | `/api/auth/logout.php` | login + CSRF | Encerra a sessão |
+| POST | `/api/auth/foto.php` | login + CSRF | Atualiza foto de perfil |
+| POST | `/api/auth/excluir.php` | login + CSRF + senha | Exclui a própria conta |
+| POST | `/api/meus-anuncios/remover.php` | login + CSRF | Remove doação publicada própria |
 | GET | `/api/auth/me.php` | — | Retorna o usuário da sessão atual (ou `null`) |
 | GET | `/api/admin/pendentes.php` | admin | Fila de moderação |
 | GET | `/api/admin/publicados.php` | admin | Todos os itens aprovados (qualquer status) |
@@ -149,3 +146,8 @@ próprio (checagem de posse, devolve 403 senão).
 
 - Múltiplas fotos por item (a tabela `item_foto` já existe no schema, pensada
   pra isso — hoje só é usado o campo `foto_url` de uma foto só, igual ao protótipo).
+
+### Foto de perfil e exclusão da conta
+A foto usa o upload validado (JPG, PNG ou WEBP, até 5 MB). O vínculo com o usuário fica em `storage/profile_photos/<id>.json`, fora da pasta pública; as imagens ficam em `public/uploads`. Preserve ambas as pastas nos backups e permita escrita pelo PHP. Não é necessário alterar o banco.
+
+A exclusão exige sessão, CSRF e senha atual; remove o cadastro, os anúncios e os registros relacionados em uma transação. Outras sessões deixam de acessar a conta na próxima requisição. A imagem de perfil atual é apagada. Arquivos antigos de fotos dos anúncios não são removidos por este fluxo.

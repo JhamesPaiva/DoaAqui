@@ -6,10 +6,12 @@
 <title>Meu perfil — DoaAqui</title>
 <meta name="theme-color" content="#BE1768">
 <meta name="description" content="Doe e encontre itens em Muriaé. Conecte-se com sua comunidade pelo DoaAqui.">
+<script src="js/theme.js"></script>
 <link rel="icon" href="assets/brand.svg" type="image/svg+xml">
 <link rel="stylesheet" href="css/identidade.css">
 <link rel="stylesheet" href="css/circular.css">
 <link rel="stylesheet" href="css/profile.css">
+<link rel="stylesheet" href="css/theme.css">
 </head>
 <body data-pagina="perfil"><a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 <header class="site">
@@ -24,6 +26,7 @@
     <div class="header-actions">
       <a class="btn btn-gold" href="index.html">Explorar mural</a>
       <div class="auth-area" id="auth-area"></div>
+      <button type="button" id="theme-toggle" class="theme-toggle" role="switch" aria-checked="false" aria-label="Tema escuro" title="Ativar tema escuro" hidden><span class="theme-toggle-thumb" aria-hidden="true"></span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.5A9 9 0 0 1 8.5 4 9 9 0 1 0 20 15.5Z"/></svg></button>
     </div>
   </div>
 </header>
@@ -31,11 +34,12 @@
 <div class="profile-heading"><a href="index.html">← Voltar ao mural</a><h1>Meu perfil</h1><p>Seu espaço na comunidade DoaAqui.</p></div>
 <p id="profile-state" role="status">Carregando suas informações…</p>
 <div id="profile-content" class="profile-layout" hidden>
-<aside class="profile-identity"><div id="profile-avatar" class="profile-avatar" aria-hidden="true"></div><h2 id="profile-name"></h2><p id="profile-type"></p><p class="profile-message">Cada doação abre espaço para uma nova história. Obrigado por fazer parte.</p></aside>
+<aside class="profile-identity"><div id="profile-avatar" class="profile-avatar" aria-hidden="true"></div><form id="profile-photo-form" class="profile-photo-form"><label for="profile-photo">Alterar foto de perfil</label><input type="file" id="profile-photo" accept="image/jpeg,image/png,image/webp" required><small>JPG, PNG ou WEBP · até 5 MB</small><button class="btn btn-ghost" type="submit">Salvar foto</button><p id="photo-feedback" role="status"></p></form><h2 id="profile-name"></h2><p id="profile-type"></p><p class="profile-message">Cada doação abre espaço para uma nova história. Obrigado por fazer parte.</p></aside>
 <div><section class="profile-details" aria-labelledby="details-title"><h2 id="details-title">Informações da conta</h2><p>Estes são os dados do seu cadastro.</p><dl class="profile-information"><div class="wide"><dt>Nome completo</dt><dd id="profile-fullname"></dd></div><div class="wide"><dt>E-mail</dt><dd id="profile-email"></dd></div><div class="wide"><dt>Telefone / WhatsApp</dt><dd id="profile-phone"></dd></div></dl></section>
 <section class="profile-activity" aria-labelledby="activity-title"><h2 id="activity-title">Suas doações</h2><div class="profile-stats"><div><b id="profile-pending">—</b><span>Aguardando aprovação</span></div><div><b id="profile-published">—</b><span>Anúncios publicados</span></div><div><b id="profile-donated">—</b><span>Marcados como doados</span></div></div><p id="profile-stats-note" class="profile-note">Resumo dos seus anúncios não excluídos.</p></section>
 <div class="profile-actions"><a class="btn btn-forest" href="index.html?minhas=1">Gerenciar minhas doações</a><a class="btn btn-ghost" href="admin.html" id="profile-admin" hidden>Abrir administração</a></div></div>
-</div></div></main>
+</div><section class="profile-danger"><div><h2>Excluir minha conta</h2><p>Apague sua conta e seus anúncios permanentemente.</p></div><button type="button" class="btn btn-ghost" id="open-delete-account">Excluir conta</button></section></div></main>
+<dialog id="delete-account-dialog" aria-labelledby="delete-account-title"><form id="delete-account-form"><span class="profile-dialog-tag">Sua conta</span><h2 id="delete-account-title">Deseja encerrar sua participação?</h2><p>Seu cadastro, foto atual, anúncios e registros vinculados serão excluídos. Essa ação não pode ser desfeita.</p><label for="delete-password">Confirme sua senha</label><input id="delete-password" type="password" autocomplete="current-password" required><p id="delete-feedback" role="alert"></p><div class="profile-actions"><button class="btn btn-ghost" type="button" id="cancel-delete-account">Manter minha conta</button><button class="btn btn-forest" type="submit">Excluir definitivamente</button></div></form></dialog>
 <footer>
   <div class="wrap footer-grid">
     <div>

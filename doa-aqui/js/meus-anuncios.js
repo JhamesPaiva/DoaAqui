@@ -64,7 +64,7 @@ async function desenhaMeusAnuncios() {
 
   corpo.querySelectorAll("[data-cancelar]").forEach(function (btn) {
     btn.addEventListener("click", function () {
-      cancelaPendenteProprio(Number(btn.dataset.cancelar));
+      cancelaPendenteProprio(Number(btn.dataset.cancelar), btn);
     });
   });
 
@@ -75,17 +75,25 @@ async function desenhaMeusAnuncios() {
   });
 }
 
-async function cancelaPendenteProprio(id) {
-  var p = buscaPorId(meusPendentesAtuais, id, "id_item");
-  if (!p) return;
-  var confirmado = window.confirm('Cancelar o anúncio "' + p.titulo + '"? Ele sai da fila de moderação.');
-  if (!confirmado) return;
-
-  var resposta = await apiFetch("/meus-anuncios/cancelar.php", { metodo: "POST", corpo: { id: id } });
-  if (!resposta.ok) { mostraAviso(resposta.erro); return; }
-
-  await desenhaMeusAnuncios();
-  mostraAviso('Anúncio "' + p.titulo + '" cancelado.');
+async function cancelaPendenteProprio(id, button) {
+  var item = buscaPorId(meusPendentesAtuais, id, 'id_item');
+  if (!item || button.disabled) return;
+  button.disabled = true;
+  if (!(await confirmaExclusaoPropria(item, button, true))) {
+    button.disabled = false; button.focus(); return;
+  }
+  button.textContent = 'Cancelando…';
+  try {
+    var resposta = await apiFetch('/meus-anuncios/cancelar.php', { metodo:'POST', corpo:{id:id} });
+    if (!resposta.ok) { mostraAviso(resposta.erro); button.focus(); return; }
+    await desenhaMeusAnuncios();
+    mostraAviso('Anúncio "' + item.titulo + '" cancelado.');
+    var nextAction = document.querySelector('#mine-body button, #mine-body select') || document.querySelector('#mine-overlay [data-close]');
+    if (nextAction) nextAction.focus();
+  } finally {
+    button.disabled = false;
+    button.textContent = 'Cancelar';
+  }
 }
 
 async function mudaStatusProprio(id, novoStatus) {
@@ -124,13 +132,13 @@ async function removeDoacaoPropria(id, button) {
   }
 }
 
-function confirmaExclusaoPropria(item, button) {
+function confirmaExclusaoPropria(item, button, pendente) {
   return new Promise(function(resolve) {
-    var box=document.createElement('div');box.className='owner-remove-confirm';box.setAttribute('role','group');box.setAttribute('aria-label','Confirmar exclusão da doação');
-    var message=document.createElement('p');message.textContent='Excluir "'+item.titulo+'"? O anúncio sairá do mural e de Minhas doações.';
+    var box=document.createElement('div');box.className='owner-remove-confirm';box.setAttribute('role','group');box.setAttribute('aria-label',pendente ? 'Confirmar cancelamento do anúncio' : 'Confirmar exclusão da doação');
+    var message=document.createElement('p');message.textContent=pendente ? 'Cancelar "'+item.titulo+'"? O anúncio sairá da fila de análise e de Minhas doações.' : 'Excluir "'+item.titulo+'"? O anúncio sairá do mural e de Minhas doações.';
     var actions=document.createElement('div');actions.className='modal-actions';
-    var cancel=document.createElement('button');cancel.type='button';cancel.className='btn btn-ghost btn-sm';cancel.textContent='Manter doação';
-    var confirm=document.createElement('button');confirm.type='button';confirm.className='btn btn-brick btn-sm';confirm.textContent='Confirmar exclusão';
+    var cancel=document.createElement('button');cancel.type='button';cancel.className='btn btn-ghost btn-sm';cancel.textContent=pendente ? 'Manter anúncio' : 'Manter doação';
+    var confirm=document.createElement('button');confirm.type='button';confirm.className='btn btn-brick btn-sm';confirm.textContent=pendente ? 'Confirmar cancelamento' : 'Confirmar exclusão';
     actions.append(cancel,confirm);box.append(message,actions);button.after(box);
     var observer=new MutationObserver(function(){if(!document.getElementById('mine-overlay').classList.contains('open'))finish(false);});
     function finish(confirmed){observer.disconnect();box.remove();resolve(confirmed);}

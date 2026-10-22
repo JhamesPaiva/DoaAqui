@@ -1,46 +1,47 @@
-# Doa Aqui
+# DoaAqui
 
-Projeto completo: front-end + back-end, em pastas separadas mas neste mesmo pacote.
+Mural de doações desenvolvido em HTML, CSS e JavaScript, com API PHP e banco MySQL.
 
-```
-DoaAqui/
-├── doa-aqui/   → front-end (HTML/CSS/JS puro), fala com a API via js/api.js
-└── backend/    → back-end (PHP puro + MySQL), a API em si
-```
+## Iniciar no Windows com Wamp
 
-## Windows — setup automático
+Com o MySQL em execução e `backend/.env` configurado, dê duplo clique em **iniciar-doaaqui.bat**.
 
-Se você está no Windows, dá pra pular os passos manuais abaixo: dê duplo-clique
-em **`executar.bat`**. Ele verifica se PHP e MySQL estão instalados (procura em
-locais comuns tipo XAMPP/WAMP/Laragon, e tenta instalar o PHP via `winget` se
-não achar), configura o banco na primeira vez que rodar (schema + dados de
-teste), cria o `backend\.env`, sobe os dois servidores em janelas separadas e
-abre o navegador — tudo isso pode ser rodado de novo sem medo, ele não recria
-nem apaga dados que já existem.
+Esse atalho chama `iniciar-doaaqui.ps1`, localiza a versão ativa do PHP em `C:\wamp64`, inicia os servidores locais em segundo plano e abre http://localhost:8080. O backend atende em http://localhost:8000. Os registros de execução ficam em `backend/storage/logs`.
 
-**Importante sobre esse script:** eu não tenho como testar `.bat` num Windows de
-verdade (meu ambiente de desenvolvimento é Linux) — validei a lógica com um
-emulador (Wine) até onde ele consegue simular, e encontrei e corrigi um bug real
-nesse processo, mas não é o mesmo nível de garantia que tenho sobre o resto do
-projeto (que testei de ponta a ponta, de verdade, repetidas vezes). Se algo não
-funcionar exatamente como esperado na sua máquina, me avise o que apareceu na
-tela que eu ajusto.
+Os dois arquivos de início são complementares: mantenha tanto o `.bat` quanto o `.ps1`.
 
-Cada pasta tem seu próprio `README.md` com instruções detalhadas pra quem
-preferir (ou precisar) rodar cada passo manualmente. Resumo de como subir os
-dois juntos:
+## Configurar uma máquina nova
 
-**1. Backend primeiro** (veja `backend/README.md` para schema, seed e `.env`):
-```bash
-cd backend
-php -S localhost:8000 -t public -d upload_max_filesize=5M -d post_max_size=6M
+Use **configurar-mysql.bat** somente para a configuração inicial. Ele chama `configurar-mysql.ps1`, solicita a senha do administrador MySQL e prepara o banco e o `.env`. O configurador recusa sobrescrever uma configuração existente.
+
+Na máquina já configurada, basta usar o iniciador. Não apague o `.env` nem importe o seed novamente para iniciar o site.
+
+## Estrutura
+
+- `doa-aqui/`: páginas, estilos, scripts e imagens da interface.
+- `backend/public/api/`: endpoints PHP.
+- `backend/public/uploads/`: imagens enviadas pelos usuários.
+- `backend/src/`: autenticação, serviços e acesso ao banco.
+- `backend/database/`: schema, dados iniciais e atualização dos bairros.
+- `backend/storage/`: sessões, logs e referências das fotos de perfil.
+- `docs/REVISAO-ORGANIZACAO.md`: análise de limpeza e organização.
+
+## Execução manual
+
+Backend, a partir de `backend/`:
+
+```powershell
+php -d upload_max_filesize=5M -d post_max_size=6M -S localhost:8000 -t public
 ```
 
-**2. Front-end depois** (veja `doa-aqui/README.md` para detalhes de CORS):
-```bash
-cd doa-aqui
-python3 -m http.server 8080
+Frontend, a partir de `doa-aqui/`:
+
+```powershell
+php -S localhost:8080
 ```
 
-Acesse `http://localhost:8080`. Login de admin de teste: `admin@doaaqui.com` / `admin123`
-(veja `backend/README.md` para as demais credenciais do seed).
+Consulte `backend/README.md` e `doa-aqui/README.md` para os detalhes da aplicação. Mantenha as credenciais do `.env` fora do Git.
+
+## Documentação e manutenção
+
+Consulte [docs/README.md](docs/README.md) para o mapa da documentação e [docs/ARQUITETURA.md](docs/ARQUITETURA.md) para responsabilidades, ordem de carregamento e cuidados com dados locais.

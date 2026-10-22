@@ -15,7 +15,7 @@ try {
     if (!is_writable(dirname($envPath))) throw new RuntimeException('Sem permissão para gravar na pasta backend.');
     $db->exec(file_get_contents($project . '/backend/database/schema.sql'));
     $db->beginTransaction();
-    try { $db->exec(file_get_contents($project . '/backend/database/seed.sql')); $db->commit(); }
+    try { $db->exec(file_get_contents($project . '/backend/database/seed.sql')); $db->exec(file_get_contents($project . '/backend/database/bairros-muriae.sql')); $db->commit(); }
     catch (Throwable $e) { if ($db->inTransaction()) $db->rollBack(); throw $e; }
     $password = bin2hex(random_bytes(24));
     $db->exec("CREATE USER 'doaaqui_app'@'localhost' IDENTIFIED BY " . $db->quote($password));
