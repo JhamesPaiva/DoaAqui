@@ -18,14 +18,6 @@ teste), cria o `backend\.env`, sobe os dois servidores em janelas separadas e
 abre o navegador — tudo isso pode ser rodado de novo sem medo, ele não recria
 nem apaga dados que já existem.
 
-**Importante sobre esse script:** eu não tenho como testar `.bat` num Windows de
-verdade (meu ambiente de desenvolvimento é Linux) — validei a lógica com um
-emulador (Wine) até onde ele consegue simular, e encontrei e corrigi um bug real
-nesse processo, mas não é o mesmo nível de garantia que tenho sobre o resto do
-projeto (que testei de ponta a ponta, de verdade, repetidas vezes). Se algo não
-funcionar exatamente como esperado na sua máquina, me avise o que apareceu na
-tela que eu ajusto.
-
 Cada pasta tem seu próprio `README.md` com instruções detalhadas pra quem
 preferir (ou precisar) rodar cada passo manualmente. Resumo de como subir os
 dois juntos:
