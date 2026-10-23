@@ -79,12 +79,16 @@ class ModeracaoService
         $titulo = trim($dados['titulo'] ?? '');
         $descricao = trim($dados['descricao'] ?? '');
         $contato = trim($dados['contato'] ?? '');
+        $contatoPublico = ($dados['contatoPublico'] ?? false) === true;
 
         if (!Validador::tamanho($titulo, 3, 255)) {
             return ['ok' => false, 'erro' => 'Título precisa ter entre 3 e 255 caracteres.'];
         }
         if (!Validador::tamanho($descricao, 3, 5000)) {
             return ['ok' => false, 'erro' => 'Descrição precisa ter entre 3 e 5000 caracteres.'];
+        }
+        if ($contatoPublico && $contato === '') {
+            return ['ok' => false, 'erro' => 'Informe um número antes de autorizar sua exibição pública.'];
         }
 
         $categoria = $this->categorias->buscarPorNome(trim($dados['categoria'] ?? ''));
@@ -107,8 +111,12 @@ class ModeracaoService
             'id_categoria' => $categoria['id_categoria'],
             'id_bairro' => $bairro['id_bairro'],
             'contato_whatsapp' => $contato,
+            'contato_publico' => $contatoPublico,
             'foto_url' => $fotoUrl !== '' ? $fotoUrl : null,
         ]);
+        if (!empty($item['foto_url']) && $item['foto_url'] !== $fotoUrl) {
+            UploadService::excluirSeNaoReferenciada($item['foto_url']);
+        }
         $this->moderacao->registrar($idItem, $idAdmin, 'Editado', 'Dados do item atualizados pelo administrador.');
 
         return ['ok' => true];
@@ -122,6 +130,7 @@ class ModeracaoService
         }
 
         $this->itens->remover($idItem);
+        if (!empty($item['foto_url'])) UploadService::excluirSeNaoReferenciada($item['foto_url']);
         $this->moderacao->registrar($idItem, $idAdmin, 'Removido', '');
 
         return ['ok' => true];

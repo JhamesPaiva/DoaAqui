@@ -6,6 +6,9 @@
 <title>Painel administrativo — Doa Aqui</title>
 <meta name="theme-color" content="#BE1768">
 <meta name="description" content="Doe e encontre itens em Muriaé. Conecte-se com sua comunidade pelo DoaAqui.">
+<!-- Em produção, configure API e uploads para os endereços HTTPS reais do backend. -->
+<meta name="doaaqui-api-base" content="http://localhost:8000/api">
+<meta name="doaaqui-uploads-base" content="http://localhost:8000">
 <script src="js/theme.js"></script>
 <link rel="icon" href="assets/brand.svg" type="image/svg+xml">
 <link rel="stylesheet" href="css/identidade.css">
@@ -99,6 +102,7 @@
     </div>
   </div>
   <div class="wrap footer-nav"><a href="index.html#mural">Encontrar doações</a><a href="index.html#como-funciona">Como funciona</a></div>
+  <div class="wrap footer-nav legal-nav"><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos de Uso</a></div>
   <div class="wrap foot-bottom">
     <span>Análise e Desenvolvimento de Sistemas — Extensão Universitária III</span>
     <span>Feito para conectar a comunidade de Muriaé</span>
@@ -115,25 +119,25 @@
       <form id="new-item-form">
         <div class="field">
           <label for="f-title">Nome do item</label>
-          <input type="text" id="f-title" placeholder="Ex: Guarda-roupa 3 portas" required>
+          <input type="text" id="f-title" name="titulo" placeholder="Ex: Guarda-roupa 3 portas" required>
         </div>
         <div class="field-row">
           <div class="field">
             <label for="f-category">Categoria</label>
-            <select id="f-category" required>
+            <select id="f-category" name="categoria" required>
               <option value="">Selecione</option>
             </select>
           </div>
           <div class="field">
             <label for="f-location">Bairro</label>
-            <select id="f-location" required>
+            <select id="f-location" name="bairro" required>
               <option value="">Selecione</option>
             </select>
           </div>
         </div>
         <div class="field">
           <label for="f-desc">Descrição</label>
-          <textarea id="f-desc" placeholder="Conte o estado do item e detalhes que ajudam quem for buscar" required></textarea>
+          <textarea id="f-desc" name="descricao" placeholder="Conte o estado do item e detalhes que ajudam quem for buscar" required></textarea>
         </div>
         <div class="field">
           <label for="f-foto">Foto do item — opcional</label>
@@ -141,11 +145,13 @@
             <b>Escolha uma foto do item</b>
             <span id="f-foto-hint">JPG, PNG ou WEBP, até 5MB</span>
           </label>
-          <input type="file" id="f-foto" accept="image/jpeg,image/png,image/webp" class="file-input">
+          <input type="file" id="f-foto" name="foto" accept="image/jpeg,image/png,image/webp" class="file-input">
         </div>
         <div class="field">
-          <label for="f-contact">Contato (WhatsApp) — opcional</label>
-          <input type="text" id="f-contact" placeholder="Deixe em branco para usar o telefone do seu cadastro">
+          <label for="f-contact">WhatsApp do anúncio — opcional</label>
+          <input type="tel" id="f-contact" name="contato" autocomplete="tel" placeholder="DDD e número, se quiser usar outro">
+          <label class="check-row"><input type="checkbox" id="f-public-contact" name="contatoPublico"> Exibir publicamente o WhatsApp neste anúncio</label>
+          <p class="hint">Marcando esta opção, o número informado será público. Se o campo ficar vazio, será usado o telefone do seu cadastro.</p>
         </div>
         <p class="hint">Seu anúncio entra na fila de moderação e aparece no mural após aprovação.</p>
         <div class="modal-actions" style="margin-top:18px;">
@@ -168,27 +174,29 @@
         <input type="hidden" id="e-id">
         <div class="field">
           <label for="e-title">Nome do item</label>
-          <input type="text" id="e-title" required>
+          <input type="text" id="e-title" name="titulo" required>
         </div>
         <div class="field-row">
           <div class="field">
             <label for="e-category">Categoria</label>
-            <select id="e-category" required>
+            <select id="e-category" name="categoria" required>
             </select>
           </div>
           <div class="field">
             <label for="e-location">Bairro</label>
-            <select id="e-location" required>
+            <select id="e-location" name="bairro" required>
             </select>
           </div>
         </div>
         <div class="field">
           <label for="e-desc">Descrição</label>
-          <textarea id="e-desc" required></textarea>
+          <textarea id="e-desc" name="descricao" required></textarea>
         </div>
         <div class="field">
-          <label for="e-contact">Contato (WhatsApp)</label>
-          <input type="text" id="e-contact" required>
+          <label for="e-contact">WhatsApp do anúncio</label>
+          <input type="tel" id="e-contact" name="contato" autocomplete="tel">
+          <label class="check-row"><input type="checkbox" id="e-public-contact" name="contatoPublico"> Autorizar a exibição pública deste número</label>
+          <p class="hint">Sem autorização, o contato deixa de ser exibido no anúncio.</p>
         </div>
         <div class="field">
           <label for="e-foto">Trocar foto — opcional</label>
@@ -196,7 +204,7 @@
             <b>Clique para escolher uma nova foto</b>
             <span id="e-foto-hint">Deixe em branco pra manter a foto atual</span>
           </label>
-          <input type="file" id="e-foto" accept="image/jpeg,image/png,image/webp" style="display:none;">
+          <input type="file" id="e-foto" name="foto" accept="image/jpeg,image/png,image/webp" style="display:none;">
         </div>
         <div class="modal-actions" style="margin-top:18px;">
           <button type="submit" class="btn btn-forest">Salvar alterações</button>
@@ -265,5 +273,6 @@
 <script src="js/form-design.js"></script>
 <script src="js/polish-ui.js"></script>
 <script src="js/interface.js"></script>
+<script src="js/reveal.js"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@
   await carregarSessao();
   await carregarCategoriasEBairros();
 
-  preencheSelect("f-category", categorias, true);
+  preencheSelect("f-category", categoriasParaNovaDoacao(categorias), true);
   preencheSelect("f-location", bairros, true);
 
   await carregarItensPublicos();
@@ -17,4 +17,8 @@
     mostraAviso("Faça login como administrador para acessar o painel.");
     abreLogin();
   }
+  var acaoInicial = params.get("acao");
+  if (acaoInicial === "entrar") abreLogin();
+  if (acaoInicial === "cadastrar") abreCadastro();
+  if (acaoInicial === "doar") document.getElementById("btn-open-form").click();
 })();

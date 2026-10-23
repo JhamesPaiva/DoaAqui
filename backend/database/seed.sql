@@ -25,20 +25,18 @@ INSERT INTO `usuario` (`nome`, `email`, `senha_hash`, `telefone_whatsapp`, `tipo
 INSERT INTO `categoria` (`nome`) VALUES
   ('Roupas'),
   ('Móveis'),
-  ('Alimentos'),
   ('Eletrônicos'),
   ('Livros'),
   ('Brinquedos');
 
 -- usuario 1 = Administrador (admin), 2 = Maria, 3 = João
--- categoria 1 = Roupas, 2 = Móveis, 3 = Alimentos
+-- categoria 1 = Roupas, 2 = Móveis, 3 = Eletrônicos
 -- bairro    1 = Centro, 2 = São José
 
 INSERT INTO `item`
   (`id_usuario_doador`, `id_categoria`, `id_bairro`, `titulo`, `descricao`, `status`, `status_moderacao`)
 VALUES
   (2, 2, 1, 'Fogão 4 bocas', 'Usado, funcionando, poucas marcas de uso.', 'Disponivel', 'Aprovado'),
-  (3, 1, 2, 'Casacos infantis', 'Tamanhos 4 a 8, bom estado.', 'Reservado', 'Aprovado'),
-  (2, 3, 1, 'Cesta de alimentos', 'Itens não perecíveis, retirar até sexta.', 'Disponivel', 'Pendente');
+  (3, 1, 2, 'Casacos infantis', 'Tamanhos 4 a 8, bom estado.', 'Reservado', 'Aprovado');
 
 -- Após este seed, aplique bairros-muriae.sql para completar o catálogo.

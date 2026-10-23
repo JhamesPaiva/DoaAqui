@@ -6,6 +6,9 @@
 <title>Doa Aqui — Mural de Doações Solidárias</title>
 <meta name="theme-color" content="#BE1768">
 <meta name="description" content="Doe e encontre itens em Muriaé. Conecte-se com sua comunidade pelo DoaAqui.">
+<!-- Em produção, configure API e uploads para os endereços HTTPS reais do backend. -->
+<meta name="doaaqui-api-base" content="http://localhost:8000/api">
+<meta name="doaaqui-uploads-base" content="http://localhost:8000">
 <script src="js/theme.js"></script>
 <link rel="icon" href="assets/brand.svg" type="image/svg+xml">
 <link rel="stylesheet" href="css/identidade.css">
@@ -39,7 +42,7 @@
 
   <section class="hero" aria-labelledby="hero-title">
     <div class="wrap hero-layout">
-      <div class="hero-copy"><h1 id="hero-title">Doe aqui.<br>Faça circular.</h1><p class="lead">Dê um novo destino ao que você não usa e encontre doações perto de você.</p><div class="hero-buttons"><button type="button" class="btn btn-white" data-donate>Quero doar <span aria-hidden="true">↗</span></button><a class="hero-explore" href="#mural">Encontrar doações <span aria-hidden="true">↓</span></a></div><p class="hero-place">De pessoa para pessoa. Em Muriaé.</p></div>
+      <div class="hero-copy"><h1 id="hero-title">Doe aqui.<br><span class="animated-gradient-title animated-gradient-title--hero">Faça circular.</span></h1><p class="lead">Dê um novo destino ao que você não usa e encontre doações perto de você.</p><div class="hero-buttons"><button type="button" class="btn btn-white" data-donate>Quero doar <span aria-hidden="true">↗</span></button><a class="hero-explore" href="#mural">Encontrar doações <span aria-hidden="true">↓</span></a></div><p class="hero-place">De pessoa para pessoa. Em Muriaé.</p></div>
       <div class="hero-art"><div class="hero-photo"><img src="assets/objetos-doacao.png" alt="Composição ilustrativa de objetos que podem ganhar uma nova casa" width="1536" height="1024" fetchpriority="high"></div><span class="orbit orbit-one" aria-hidden="true"></span><span class="orbit orbit-two" aria-hidden="true"></span><div class="circle-message" aria-hidden="true">Uma nova<br>história<br><span>começa aqui ↗</span></div></div>
     </div>
   </section>
@@ -49,7 +52,7 @@
     <div class="wrap">
       <div class="mural-head">
         <div>
-          <h2>Encontre sua<br>próxima doação</h2><p class="mural-intro">Um novo começo pode estar mais perto do que você imagina.</p>
+          <h2 class="animated-gradient-title">Encontre sua<br>próxima doação</h2><p class="mural-intro">Um novo começo pode estar mais perto do que você imagina.</p>
 
         </div>
         <div class="mural-symbol" aria-hidden="true">↗</div>
@@ -84,7 +87,7 @@
   </section>
   <section class="how" id="como-funciona">
     <div class="wrap">
-      <h2>Uma doação,<br>um novo começo</h2>
+      <h2 class="animated-gradient-title">Uma doação,<br>um novo começo</h2>
       <p class="sub">Do seu armário para a vida de alguém. Você combina tudo diretamente com o doador.</p>
       <figure class="how-photo"><img src="assets/objetos-doacao.png" width="1536" height="1024" alt="Composição ilustrativa de cadeira, roupas, livros e brinquedo, objetos que podem ser doados" loading="lazy"><figcaption>Uma nova história para o que você já tem. Imagem ilustrativa.</figcaption></figure><div class="steps">
         <div class="step">
@@ -106,7 +109,7 @@
     </div>
   </section>
 
-  <section class="donate-close"><div class="wrap"><div><h2>Tem algo parado por aí?</h2><p>Pode ser o que alguém está procurando.</p></div><button class="btn btn-forest" type="button" data-donate>Quero doar <span aria-hidden="true">↗</span></button></div></section>
+  <section class="donate-close"><div class="wrap"><div><h2 class="animated-gradient-title">Tem algo parado por aí?</h2><p>Pode ser o que alguém está procurando.</p></div><button class="btn btn-forest" type="button" data-donate>Quero doar <span aria-hidden="true">↗</span></button></div></section>
 </main>
 
 <footer>
@@ -126,6 +129,7 @@
     </div>
   </div>
   <div class="wrap footer-nav"><a href="index.html#mural">Encontrar doações</a><a href="index.html#como-funciona">Como funciona</a></div>
+  <div class="wrap footer-nav legal-nav"><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos de Uso</a></div>
   <div class="wrap foot-bottom">
     <span>Análise e Desenvolvimento de Sistemas — Extensão Universitária III</span>
     <span>Feito para conectar a comunidade de Muriaé</span>
@@ -152,25 +156,25 @@
       <form id="new-item-form">
         <div class="field">
           <label for="f-title">Nome do item</label>
-          <input type="text" id="f-title" placeholder="Ex: Guarda-roupa 3 portas" required>
+          <input type="text" id="f-title" name="titulo" placeholder="Ex: Guarda-roupa 3 portas" required>
         </div>
         <div class="field-row">
           <div class="field">
             <label for="f-category">Categoria</label>
-            <select id="f-category" required>
+            <select id="f-category" name="categoria" required>
               <option value="">Selecione</option>
             </select>
           </div>
           <div class="field">
             <label for="f-location">Bairro</label>
-            <select id="f-location" required>
+            <select id="f-location" name="bairro" required>
               <option value="">Selecione</option>
             </select>
           </div>
         </div>
         <div class="field">
           <label for="f-desc">Descrição</label>
-          <textarea id="f-desc" placeholder="Conte o estado do item e detalhes que ajudam quem for buscar" required></textarea>
+          <textarea id="f-desc" name="descricao" placeholder="Conte o estado do item e detalhes que ajudam quem for buscar" required></textarea>
         </div>
         <div class="field">
           <label for="f-foto">Foto do item — opcional</label>
@@ -178,11 +182,13 @@
             <b>Escolha uma foto do item</b>
             <span id="f-foto-hint">JPG, PNG ou WEBP, até 5MB</span>
           </label>
-          <input type="file" id="f-foto" accept="image/jpeg,image/png,image/webp" class="file-input">
+          <input type="file" id="f-foto" name="foto" accept="image/jpeg,image/png,image/webp" class="file-input">
         </div>
         <div class="field">
-          <label for="f-contact">Contato (WhatsApp) — opcional</label>
-          <input type="text" id="f-contact" placeholder="Deixe em branco para usar o telefone do seu cadastro">
+          <label for="f-contact">WhatsApp do anúncio — opcional</label>
+          <input type="tel" id="f-contact" name="contato" autocomplete="tel" placeholder="DDD e número, se quiser usar outro">
+          <label class="check-row"><input type="checkbox" id="f-public-contact" name="contatoPublico"> Exibir publicamente o WhatsApp neste anúncio</label>
+          <p class="hint">Marcando esta opção, o número informado será público. Se o campo ficar vazio, será usado o telefone do seu cadastro.</p>
         </div>
         <p class="hint">Seu anúncio entra na fila de moderação e aparece no mural após aprovação.</p>
         <div class="modal-actions" style="margin-top:18px;">
@@ -250,6 +256,10 @@
             <input type="password" id="c-confirma" autocomplete="new-password" required>
           </div>
         </div>
+        <div class="field">
+          <label class="check-row"><input type="checkbox" id="c-aceitou-termos" required> Li e aceito os <a href="termos.html" target="_blank" rel="noopener">Termos de Uso</a></label>
+          <p class="hint">Consulte também o <a href="privacidade.html" target="_blank" rel="noopener">Aviso de Privacidade</a> para saber como os dados da conta e dos anúncios são usados.</p>
+        </div>
         <p class="hint">Já tem conta? <a href="#" id="link-ir-login">Entrar</a>.</p>
         <div class="modal-actions" style="margin-top:18px;">
           <button type="submit" class="btn btn-forest">Criar conta</button>
@@ -286,5 +296,6 @@
 <script src="js/form-design.js"></script>
 <script src="js/polish-ui.js"></script>
 <script src="js/interface.js"></script>
+<script src="js/reveal.js"></script>
 </body>
 </html>

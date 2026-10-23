@@ -16,6 +16,12 @@ if (!is_string($senha) || !password_verify($senha, $registro['senha_hash'])) {
     LoginThrottle::registrarFalha($chave);
     Response::erro('Senha incorreta. Confira para confirmar a exclusão.', 422);
 }
+$stmtFotos = Conexao::obter()->prepare(
+    'SELECT foto_url FROM item WHERE id_usuario_doador = ? AND foto_url IS NOT NULL
+     UNION SELECT f.foto_url FROM item_foto f JOIN item i ON i.id_item = f.id_item WHERE i.id_usuario_doador = ?'
+);
+$stmtFotos->execute([$usuario['id'], $usuario['id']]);
+$fotosAnuncios = $stmtFotos->fetchAll(\PDO::FETCH_COLUMN);
 $pdo = Conexao::obter();
 $pdo->beginTransaction();
 try {
@@ -38,6 +44,9 @@ try {
 } catch (\Throwable $e) {
     $pdo->rollBack();
     throw $e;
+}
+foreach ($fotosAnuncios as $fotoUrl) {
+    \DoaAqui\Services\UploadService::excluirSeNaoReferenciada((string) $fotoUrl);
 }
 \DoaAqui\Services\ProfilePhotoService::excluir($usuario['id']);
 LoginThrottle::limpar($chave);

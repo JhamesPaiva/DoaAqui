@@ -15,8 +15,10 @@ $nome = Request::texto('nome');
 $email = Request::texto('email');
 $senha = Request::texto('senha');
 $telefone = Request::texto('telefone');
+$corpo = Request::corpoJson();
+$aceitouTermos = ($corpo['aceitouTermos'] ?? false) === true;
 
-$resultado = (new AuthService())->cadastrar($nome, $email, $senha, $telefone);
+$resultado = (new AuthService())->cadastrar($nome, $email, $senha, $telefone, $aceitouTermos);
 
 if (!$resultado['ok']) {
     Response::erro($resultado['erro'], 422);

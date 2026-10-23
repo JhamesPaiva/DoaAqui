@@ -9,10 +9,10 @@ async function carregarSessao() {
   atualizaCabecalho();
 }
 
-async function cadastrarUsuario(nome, email, senha, telefone) {
+async function cadastrarUsuario(nome, email, senha, telefone, aceitouTermos) {
   var resposta = await apiFetch("/auth/cadastro.php", {
     metodo: "POST",
-    corpo: { nome: nome, email: email, senha: senha, telefone: telefone }
+    corpo: { nome: nome, email: email, senha: senha, telefone: telefone, aceitouTermos: aceitouTermos }
   });
   if (!resposta.ok) return { ok: false, erro: resposta.erro };
 
@@ -63,14 +63,14 @@ function abreLogin() {
   var form = document.getElementById("login-form");
   if (!form) return;
   form.reset();
-  document.getElementById("login-overlay").classList.add("open");
+  abrirModal("login-overlay");
 }
 
 function abreCadastro() {
   var form = document.getElementById("cadastro-form");
   if (!form) return;
   form.reset();
-  document.getElementById("cadastro-overlay").classList.add("open");
+  abrirModal("cadastro-overlay");
 }
 
 function atualizaCabecalho() {
@@ -120,21 +120,23 @@ if (formCadastro) {
     var senha = document.getElementById("c-senha").value;
     var confirma = document.getElementById("c-confirma").value;
     var telefone = document.getElementById("c-telefone").value.trim();
+    var aceitouTermos = document.getElementById("c-aceitou-termos").checked;
 
     if (senha.length < 4) { formFeedback(formCadastro,"Use pelo menos 4 caracteres na senha.","c-senha"); return; }
     if (senha !== confirma) { formFeedback(formCadastro,"As senhas não coincidem. Confira os dois campos.","c-confirma"); return; }
+    if (!aceitouTermos) { formFeedback(formCadastro,"Aceite os Termos de Uso para criar sua conta.","c-aceitou-termos"); return; }
 
     var button = formCadastro.querySelector('button[type=submit]');
     if (button.disabled) return;
     var originalLabel=button.textContent;button.disabled=true;button.textContent='Aguarde…';
     var r;
-    try { r = await cadastrarUsuario(nome, email, senha, telefone); } finally {button.disabled=false;button.textContent=originalLabel;}
+    try { r = await cadastrarUsuario(nome, email, senha, telefone, aceitouTermos); } finally {button.disabled=false;button.textContent=originalLabel;}
     if (!r.ok) { formFeedback(formCadastro,r.erro); return; }
 
     fechaModais();
     atualizaCabecalho();
     if (new URLSearchParams(window.location.search).get("perfil") === "1") { window.location.href="perfil.html"; return; }
-    if (window.doacaoAposLogin) { window.doacaoAposLogin = false; document.getElementById("form-overlay").classList.add("open"); }
+    if (window.doacaoAposLogin) { window.doacaoAposLogin = false; abrirModal("form-overlay"); }
     mostraAviso("Conta criada! Bem-vindo(a), " + r.usuario.nome.split(" ")[0] + ".");
   });
 }
@@ -156,7 +158,7 @@ if (formLogin) {
     fechaModais();
     atualizaCabecalho();
     if (new URLSearchParams(window.location.search).get("perfil") === "1") { window.location.href="perfil.html"; return; }
-    if (window.doacaoAposLogin) { window.doacaoAposLogin = false; document.getElementById("form-overlay").classList.add("open"); }
+    if (window.doacaoAposLogin) { window.doacaoAposLogin = false; abrirModal("form-overlay"); }
     mostraAviso("Bem-vindo(a) de volta, " + r.usuario.nome.split(" ")[0] + "!");
   });
 }

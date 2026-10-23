@@ -27,7 +27,7 @@ backend/
 │   └── api/               → os endpoints de fato
 └── database/
     ├── schema.sql          → script de criação das tabelas, sem dados
-    └── seed.sql            → dados de teste com senhas reais (bcrypt)
+    └── seed.sql            → contas e anúncios de demonstração (não usar em produção)
 ```
 
 **Importante:** ao publicar em produção, aponte o document root do Apache/Nginx
@@ -51,7 +51,7 @@ e `database/` não podem ser acessíveis por URL.
    ```
    Preencha `DB_USER`/`DB_PASS` no `.env` com esse usuário, não com root.
 
-3. Rode o schema e o seed — **atenção ao charset do cliente mysql**, senão os
+3. Rode o schema e os dados locais — **atenção ao charset do cliente mysql**, senão os
    acentos corrompem ao inserir (isso me pegou nos testes: o `mysql` CLI usa
    `latin1` por padrão, mesmo com a tabela em `utf8mb4`):
    ```bash
@@ -59,6 +59,11 @@ e `database/` não podem ser acessíveis por URL.
    mysql --default-character-set=utf8mb4 -u root doaaqui < database/seed.sql
    mysql --default-character-set=utf8mb4 -u root doaaqui < database/bairros-muriae.sql
    ```
+   Para atualizar uma instalação anterior, faça backup e aplique uma vez
+   `database/migrations/2026-10-23-privacidade.sql`. A migração oculta contatos
+   de anúncios antigos até que cada titular autorize a exibição novamente.
+   Em produção, crie um banco vazio e aplique somente `schema.sql` e os dados
+   institucionais necessários; não importe `seed.sql`, que contém contas de teste.
    `schema.sql` é só a criação das tabelas (sem dado nenhum). O seed de exemplo
    *original* que veio junto do schema entregue (com hashes de senha falsos, só
    estrutural) está preservado à parte em `../docs/academico/historico/schema_seed_exemplo_original.sql`,
@@ -150,4 +155,21 @@ próprio (checagem de posse, devolve 403 senão).
 ### Foto de perfil e exclusão da conta
 A foto usa o upload validado (JPG, PNG ou WEBP, até 5 MB). O vínculo com o usuário fica em `storage/profile_photos/<id>.json`, fora da pasta pública; as imagens ficam em `public/uploads`. Preserve ambas as pastas nos backups e permita escrita pelo PHP. Não é necessário alterar o banco.
 
-A exclusão exige sessão, CSRF e senha atual; remove o cadastro, os anúncios e os registros relacionados em uma transação. Outras sessões deixam de acessar a conta na próxima requisição. A imagem de perfil atual é apagada. Arquivos antigos de fotos dos anúncios não são removidos por este fluxo.
+A exclusão exige sessão, CSRF e senha atual; remove o cadastro, os anúncios e os registros relacionados em uma transação. Outras sessões deixam de acessar a conta na próxima requisição. A imagem de perfil atual é apagada; arquivos de anúncios sem outro vínculo também são removidos. Backups e logs de infraestrutura seguem os prazos configurados pela operação e precisam constar no Aviso de Privacidade.
+
+## Preparação para produção e privacidade
+
+- Configure `CORS_ALLOWED_ORIGIN` com a origem HTTPS exata do front-end.
+- Em `doa-aqui/index.html`, `admin.html` e `perfil.html`, troque os metadados
+  `doaaqui-api-base` e `doaaqui-uploads-base` pelos endereços HTTPS reais.
+- Use HTTPS em todo o site e API; revise domínio, cookies `Secure`, CORS e
+  política de segurança de conteúdo no ambiente publicado.
+- Não publique as credenciais de teste do seed, `.env`, logs, pastas `src/`,
+  `config/` ou `database/`. Crie administradores com credenciais próprias.
+- Defina o controlador, canal para direitos LGPD, fornecedores e localidades de
+  armazenamento, bases legais por finalidade e prazos de retenção/backup. Os
+  documentos em `doa-aqui/privacidade.html` e `doa-aqui/termos.html` usam dados
+  fictícios identificados como demonstração; revise-os com as informações e
+  práticas reais antes de publicar.
+- Consulte [o inventário de privacidade e operação](../docs/PRIVACIDADE-OPERACAO.md)
+  para dados observados no código e decisões ainda pendentes.

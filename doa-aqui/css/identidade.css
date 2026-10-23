@@ -1020,16 +1020,6 @@ footer {
 .modal-body:has(.admin-table) {
   overflow:auto
 }
-@keyframes card-in {
-  from {
-    opacity:0;
-    transform:translateY(12px)
-  }
-  to {
-    opacity:1;
-    transform:translateY(0)
-  }
-}
 @keyframes photo-drift {
   from {
     transform:scale(1)
@@ -1043,8 +1033,20 @@ footer {
     opacity:.5
   }
 }
-.reveal-active {
-  animation:card-in .65s ease both
+.reveal-target {
+  opacity:0;
+  transform:translateY(22px);
+  transition:opacity .55s cubic-bezier(.2,.65,.3,1),transform .55s cubic-bezier(.2,.65,.3,1)
+}
+.reveal-target.reveal-active,.reveal-target:focus-within {
+  opacity:1;
+  transform:translateY(0)
+}
+@media(prefers-reduced-motion:reduce) {
+  .reveal-target {
+    opacity:1;
+    transform:none
+  }
 }
 @media(min-width:1450px) {
   .hero h1 {

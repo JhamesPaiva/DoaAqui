@@ -2,7 +2,7 @@
 
 Projeto de extensão universitária desenvolvido para o curso de **Análise e Desenvolvimento de Sistemas**, na disciplina **Extensão Universitária III**.
 
-O **Doa Aqui** é uma plataforma web que conecta pessoas que querem doar itens (roupas, móveis, alimentos, eletrônicos, livros e brinquedos) com pessoas da comunidade que precisam desses itens — de forma simples, direta e sem burocracia.
+O **Doa Aqui** é uma plataforma web que conecta pessoas que querem doar itens (roupas, móveis, eletrônicos, livros e brinquedos) com pessoas da comunidade que precisam desses itens — de forma simples, direta e sem burocracia.
 
 > Protótipo de demonstração, desenvolvido como exercício acadêmico com potencial de gerar impacto social real na comunidade atendida pela equipe.
 
@@ -45,19 +45,20 @@ O sistema é dividido em duas áreas:
 | Modelagem do banco | [dbdiagram.io](https://dbdiagram.io) (DBML) |
 
 > O front-end (`index.html` / `admin.html`) fala com o back-end PHP (pasta `/backend`)
-> através da API em `js/api.js`. Sessão de login, itens, moderação e "Meus anúncios"
-> são dados reais, vindos do banco — não há mais nada mockado em `localStorage`.
+> através da API em `js/api.js`. Sessão, itens, moderação e "Minhas doações" vêm do
+> backend; `localStorage` é usado apenas para guardar a preferência de tema.
 
 ---
 
 ## 🗄️ Modelagem do banco de dados
 
-O banco foi modelado em **DBML** e é composto por 7 tabelas principais:
+O banco foi modelado em **DBML** e é composto por 8 tabelas:
 
 | Tabela | Responsabilidade |
 |---|---|
 | `usuario` | Cadastro de doadores, interessados e administradores |
-| `categoria` | Categorias de itens (Roupas, Móveis, Alimentos, Eletrônicos, Livros, Brinquedos) |
+| `aceite_termo` | Versão e data/hora do aceite dos Termos pela conta |
+| `categoria` | Categorias de itens; Alimentos permanece para anúncios legados, mas não pode ser usada em novas doações |
 | `bairro` | Localizações usadas no filtro de busca |
 | `item` | Anúncios de doação publicados |
 | `item_foto` | Fotos de cada item (preparado para múltiplas imagens no futuro) |
@@ -70,16 +71,17 @@ Principais decisões de modelagem:
 - Índices nos campos usados em filtros (`status`, `id_categoria`, `id_bairro`) para manter buscas rápidas
 - Métricas sociais (RF10) calculadas via consultas SQL agregadas, sem tabela dedicada
 
-Os arquivos de modelagem estão disponíveis em [`/database`](./database) (cópia de
-referência) e em [`/backend/database`](../backend/database) (a que o back-end usa de fato):
-- `doaaqui.dbml` — código-fonte do modelo, pronto para importar no dbdiagram.io
-- `../docs/academico/doaaqui_schema.sql` / `../backend/database/schema.sql` — script de criação do banco (MySQL 8+)
+O schema operacional (MySQL 8+) está em
+[`../backend/database/schema.sql`](../backend/database/schema.sql). Os modelos e
+documentos históricos estão em [`../docs/academico`](../docs/academico), fora da
+instalação ativa; consulte o README dessa pasta antes de usar qualquer SQL antigo.
 
 ---
 
 ## 📋 Requisitos do sistema
 
-O levantamento completo de requisitos funcionais e não funcionais está documentado em [`/docs/Documento_de_Requisitos_DoaAqui.docx`](./docs).
+O levantamento completo de requisitos funcionais e não funcionais está em
+[`../docs/academico/Documento_de_Requisitos_DoaAqui.docx`](../docs/academico/Documento_de_Requisitos_DoaAqui.docx).
 
 **Principais requisitos funcionais:**
 - RF01 — Cadastrar item para doação com foto, descrição e categoria
@@ -112,8 +114,9 @@ python3 -m http.server 8080
 ```
 Acesse `http://localhost:8080`.
 
-**3. Confira se as origens batem**: `js/api.js` aponta `API_BASE` para
-`http://localhost:8000/api`, e o `.env` do backend precisa ter
+**3. Confira se as origens batem**: `js/api.js` lê `doaaqui-api-base` e
+`doaaqui-uploads-base` dos metadados HTML (com fallback local para
+`http://localhost:8000`), e o `.env` do backend precisa ter
 `CORS_ALLOWED_ORIGIN=http://localhost:8080` (ou a porta que você usar). Se as duas
 pontas não baterem exatamente, o navegador bloqueia a requisição por CORS.
 
@@ -146,8 +149,9 @@ Este projeto foi desenvolvido para fins acadêmicos como parte da disciplina de 
 - `index.html`: mural, filtros, login, cadastro e criação de doações.
 - `admin.html`: moderação e edição.
 - `perfil.html`: informações da conta, foto e exclusão.
+- `termos.html` e `privacidade.html`: documentos demonstrativos com dados fictícios explicitamente identificados; revise controlador, contatos e práticas reais antes de publicar.
 - `assets/`: imagens e ícones utilizados pela interface.
-- `css/`: seis folhas ativas (base visual, identidade circular, formulários, perfil, temas e interações).
-- `js/`: módulos por responsabilidade; a ordem de carregamento nas páginas deve ser preservada.
+- `css/`: estilos compartilhados e `legal.css`, usado somente nas páginas de Termos e Privacidade.
+- `js/`: módulos por responsabilidade; `reveal.js` cuida da entrada ao rolar e `legal.js` da autenticação/rodapé nas páginas legais. Preserve a ordem de carregamento declarada no HTML.
 
 Consulte [arquitetura](../docs/ARQUITETURA.md) e [documentação de design](../docs/design/README.md). O material acadêmico está em [docs/academico](../docs/academico/README.md), fora da pasta servida pelo frontend.

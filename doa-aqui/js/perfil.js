@@ -25,19 +25,111 @@ var profileMenu=document.querySelector('.menu-toggle');
 profileMenu.addEventListener('click',function(){var open=document.getElementById('main-nav').classList.toggle('is-open');profileMenu.setAttribute('aria-expanded',String(open));profileMenu.textContent=open?'Fechar menu':'Menu';});
 
 var photoForm = document.getElementById('profile-photo-form');
+var photoInput = document.getElementById('profile-photo');
+var photoEditor = document.getElementById('profile-photo-editor');
+var editPhotoButton = document.getElementById('edit-profile-photo');
+var cancelPhotoButton = document.getElementById('cancel-profile-photo');
+var savePhotoButton = document.getElementById('save-profile-photo');
+var photoName = document.getElementById('profile-photo-name');
+var photoFeedback = document.getElementById('photo-feedback');
+var defaultPhotoName = photoName.textContent;
+var photoSaving = false;
+
+function resetPhotoEditor() {
+  photoForm.reset();
+  photoName.textContent = defaultPhotoName;
+  photoFeedback.textContent = '';
+  photoFeedback.hidden = true;
+  savePhotoButton.disabled = true;
+}
+
+function setPhotoEditorOpen(open) {
+  photoEditor.hidden = !open;
+  editPhotoButton.hidden = open;
+  editPhotoButton.setAttribute('aria-expanded', String(open));
+}
+
+editPhotoButton.addEventListener('click', function () {
+  resetPhotoEditor();
+  setPhotoEditorOpen(true);
+  photoInput.focus();
+});
+
+cancelPhotoButton.addEventListener('click', function () {
+  resetPhotoEditor();
+  setPhotoEditorOpen(false);
+  editPhotoButton.focus();
+});
+
+photoInput.addEventListener('change', function () {
+  var file = photoInput.files[0];
+  var validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+  photoFeedback.textContent = '';
+  photoFeedback.hidden = true;
+  savePhotoButton.disabled = true;
+  if (!file) {
+    photoName.textContent = defaultPhotoName;
+    return;
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    photoInput.value = '';
+    photoName.textContent = defaultPhotoName;
+    photoFeedback.textContent = 'Escolha uma imagem de até 5 MB.';
+    photoFeedback.hidden = false;
+    return;
+  }
+  if (file.type && validTypes.indexOf(file.type) === -1) {
+    photoInput.value = '';
+    photoName.textContent = defaultPhotoName;
+    photoFeedback.textContent = 'Escolha uma imagem JPG, PNG ou WEBP.';
+    photoFeedback.hidden = false;
+    return;
+  }
+  photoName.textContent = file.name;
+  savePhotoButton.disabled = false;
+});
+
 photoForm.addEventListener('submit', async function (event) {
   event.preventDefault();
-  var file = document.getElementById('profile-photo').files[0];
-  var feedback = document.getElementById('photo-feedback');
-  if (!file) return;
-  if (file.size > 5 * 1024 * 1024) { feedback.textContent = 'Escolha uma imagem de até 5 MB.'; return; }
-  var button = photoForm.querySelector('button');
-  button.disabled = true; button.textContent = 'Salvando…';
+  var file = photoInput.files[0];
+  if (!file || photoSaving) return;
+  if (file.size > 5 * 1024 * 1024) {
+    photoFeedback.textContent = 'Escolha uma imagem de até 5 MB.';
+    photoFeedback.hidden = false;
+    return;
+  }
+  photoSaving = true;
+  savePhotoButton.disabled = true;
+  cancelPhotoButton.disabled = true;
+  photoInput.disabled = true;
+  savePhotoButton.textContent = 'Salvando…';
   var data = new FormData(); data.append('foto', file);
-  var result = await apiFetch('/auth/foto.php', {metodo:'POST', corpo:data});
-  button.disabled = false; button.textContent = 'Salvar foto';
-  feedback.textContent = result.ok ? 'Foto de perfil atualizada!' : result.erro;
-  if (result.ok) { sessao = result.usuario; atualizaCabecalho(); renderProfileAvatar(document.getElementById('profile-avatar'), sessao); photoForm.reset(); }
+  try {
+    var result = await apiFetch('/auth/foto.php', {metodo:'POST', corpo:data});
+    if (result.ok) {
+      sessao = result.usuario;
+      atualizaCabecalho();
+      renderProfileAvatar(document.getElementById('profile-avatar'), sessao);
+      resetPhotoEditor();
+      setPhotoEditorOpen(false);
+      photoFeedback.textContent = 'Foto de perfil atualizada!';
+      photoFeedback.hidden = false;
+      editPhotoButton.focus();
+    } else {
+      photoFeedback.textContent = result.erro || 'Não foi possível salvar a foto. Tente novamente.';
+      photoFeedback.hidden = false;
+      savePhotoButton.disabled = false;
+    }
+  } catch (error) {
+    photoFeedback.textContent = 'Não foi possível salvar a foto. Verifique sua conexão e tente novamente.';
+    photoFeedback.hidden = false;
+    savePhotoButton.disabled = false;
+  } finally {
+    photoSaving = false;
+    cancelPhotoButton.disabled = false;
+    photoInput.disabled = false;
+    savePhotoButton.textContent = 'Salvar foto';
+  }
 });
 var deleteDialog = document.getElementById('delete-account-dialog');
 var deleteForm = document.getElementById('delete-account-form');

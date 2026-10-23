@@ -6,7 +6,7 @@ var meusPublicadosAtuais = [];
 
 async function abreMeusAnuncios() {
   await desenhaMeusAnuncios();
-  document.getElementById("mine-overlay").classList.add("open");
+  abrirModal("mine-overlay");
 }
 
 async function desenhaMeusAnuncios() {
@@ -30,8 +30,8 @@ async function desenhaMeusAnuncios() {
   } else {
     html += '<table class="admin-table"><thead><tr><th>Item</th><th>Categoria</th><th>Ações</th></tr></thead><tbody>';
     for (var i = 0; i < meusPendentesAtuais.length; i++) {
-      html += '<tr><td>' + meusPendentesAtuais[i].titulo + '</td><td>' + meusPendentesAtuais[i].categoria + '</td>';
-      html += '<td><button class="icon-btn reject" data-cancelar="' + meusPendentesAtuais[i].id_item + '">Cancelar</button></td></tr>';
+      html += '<tr><td>' + htmlSeguro(meusPendentesAtuais[i].titulo) + '</td><td>' + htmlSeguro(meusPendentesAtuais[i].categoria) + '</td>';
+      html += '<td><button class="icon-btn reject" data-cancelar="' + htmlSeguro(meusPendentesAtuais[i].id_item) + '">Cancelar</button></td></tr>';
     }
     html += '</tbody></table>';
   }
@@ -43,12 +43,12 @@ async function desenhaMeusAnuncios() {
     html += '<table class="admin-table"><thead><tr><th>Item</th><th>Categoria</th><th>Status</th><th>Ações</th></tr></thead><tbody>';
     for (var j = 0; j < meusPublicadosAtuais.length; j++) {
       var it = meusPublicadosAtuais[j];
-      html += '<tr><td>' + it.titulo + '</td><td>' + it.categoria + '</td>';
-      html += '<td><select class="status-select" data-mine-status="' + it.id_item + '">';
+      html += '<tr><td>' + htmlSeguro(it.titulo) + '</td><td>' + htmlSeguro(it.categoria) + '</td>';
+      html += '<td><select class="status-select" data-mine-status="' + htmlSeguro(it.id_item) + '">';
       html += '<option' + (it.status === "Disponível" ? ' selected' : '') + '>Disponível</option>';
       html += '<option' + (it.status === "Reservado" ? ' selected' : '') + '>Reservado</option>';
       html += '<option' + (it.status === "Doado" ? ' selected' : '') + '>Doado</option>';
-      html += '</select></td><td><button type="button" class="icon-btn remove" data-remover-proprio="' + it.id_item + '">Excluir doação</button></td></tr>';
+      html += '</select></td><td><button type="button" class="icon-btn remove" data-remover-proprio="' + htmlSeguro(it.id_item) + '">Excluir doação</button></td></tr>';
     }
     html += '</tbody></table>';
   }

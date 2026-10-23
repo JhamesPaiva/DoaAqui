@@ -19,6 +19,9 @@
 @media(min-width:721px){.form-studio .modal-head{position:sticky;top:0}.studio-donation .studio-story{position:sticky;top:0;align-self:start;min-height:min(820px,calc(100dvh - 64px))}.studio-donation .donation-preview{margin-top:24px}}
 
 /* Field surfaces only; dialog composition and brand colors stay unchanged. */
+.form-studio .field .check-row{display:flex;align-items:flex-start;gap:10px;width:fit-content;max-width:100%;margin:12px 0 0;color:var(--ink-soft);font-size:14px;font-weight:600;line-height:1.5;cursor:pointer}
+.form-studio .field .check-row input[type=checkbox]{appearance:auto;display:block;flex:0 0 18px;width:18px;min-width:18px;height:18px;min-height:18px;margin:2px 0 0;padding:0;border:1px solid var(--line);border-radius:4px;background:transparent;color:var(--brand);accent-color:var(--brand);box-sizing:border-box}
+.form-studio .field .check-row input[type=checkbox]:focus-visible{outline:2px solid var(--brand);outline-offset:3px}
 .form-studio .control-surface{position:relative;min-width:0;background:#fff;border:1px solid #c8cfd8;border-radius:15px;box-shadow:0 2px 3px #26334205;transition:border-color .18s,box-shadow .18s,background .18s;isolation:isolate}
 .form-studio .control-surface:hover{border-color:#a88098;background:#fffcfe}
 .form-studio .control-surface:focus-within{border-color:var(--brand);box-shadow:0 0 0 3px #be176814,0 5px 16px #be17680a;background:#fff}

@@ -55,7 +55,7 @@ function desenhaGrade() {
     document.getElementById("retry-feed").addEventListener("click", async function () {
       this.disabled = true; this.textContent = "Carregando…";
       await carregarCategoriasEBairros();
-      preencheSelect("f-category", categorias, true); preencheSelect("f-location", bairros, true);
+      preencheSelect("f-category", categoriasParaNovaDoacao(categorias), true); preencheSelect("f-location", bairros, true);
       await carregarItensPublicos(); desenhaFiltroCategoria(); desenhaFiltroLocal(); desenhaGrade();
     });
     return;

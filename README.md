@@ -22,9 +22,10 @@ Na máquina já configurada, basta usar o iniciador. Não apague o `.env` nem im
 - `backend/public/api/`: endpoints PHP.
 - `backend/public/uploads/`: imagens enviadas pelos usuários.
 - `backend/src/`: autenticação, serviços e acesso ao banco.
-- `backend/database/`: schema, dados iniciais e atualização dos bairros.
+- `backend/database/`: schema, seed de desenvolvimento, catálogo de bairros e migrações pontuais.
 - `backend/storage/`: sessões, logs e referências das fotos de perfil.
-- `docs/REVISAO-ORGANIZACAO.md`: análise de limpeza e organização.
+- `docs/PRIVACIDADE-OPERACAO.md`: inventário de dados, controles implementados e decisões pendentes para LGPD.
+- `doa-aqui/privacidade.html` e `doa-aqui/termos.html`: exemplos demonstrativos com dados fictícios; revisar e substituir pelas informações reais antes da publicação.
 
 ## Execução manual
 

@@ -30,19 +30,29 @@ class UsuarioRepository
         return $linha ?: null;
     }
 
-    public function criar(string $nome, string $email, string $senhaHash, string $telefone): int
+    public function criar(string $nome, string $email, string $senhaHash, string $telefone, string $versaoTermos): int
     {
         $pdo = Conexao::obter();
-        $stmt = $pdo->prepare(
-            'INSERT INTO usuario (nome, email, senha_hash, telefone_whatsapp, tipo)
-             VALUES (:nome, :email, :senha_hash, :telefone, "comum")'
-        );
-        $stmt->execute([
-            'nome' => $nome,
-            'email' => $email,
-            'senha_hash' => $senhaHash,
-            'telefone' => $telefone,
-        ]);
-        return (int) $pdo->lastInsertId();
+        $pdo->beginTransaction();
+        try {
+            $stmt = $pdo->prepare(
+                'INSERT INTO usuario (nome, email, senha_hash, telefone_whatsapp, tipo)
+                 VALUES (:nome, :email, :senha_hash, :telefone, "comum")'
+            );
+            $stmt->execute([
+                'nome' => $nome,
+                'email' => $email,
+                'senha_hash' => $senhaHash,
+                'telefone' => $telefone,
+            ]);
+            $id = (int) $pdo->lastInsertId();
+            $aceite = $pdo->prepare('INSERT INTO aceite_termo (id_usuario, versao) VALUES (:id, :versao)');
+            $aceite->execute(['id' => $id, 'versao' => $versaoTermos]);
+            $pdo->commit();
+            return $id;
+        } catch (\Throwable $e) {
+            if ($pdo->inTransaction()) $pdo->rollBack();
+            throw $e;
+        }
     }
 }

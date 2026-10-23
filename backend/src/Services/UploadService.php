@@ -74,4 +74,18 @@ class UploadService
 
         return ['ok' => true, 'url' => '/uploads/' . $nomeArquivo];
     }
+
+    /** Remove imagem órfã sem apagar arquivo ainda usado por outro anúncio. */
+    public static function excluirSeNaoReferenciada(string $url): void
+    {
+        if (!preg_match('~^/uploads/[a-f0-9]{32}\.(jpg|jpeg|png|webp)$~i', $url)) return;
+        $pdo = \DoaAqui\Database\Conexao::obter();
+        $stmt = $pdo->prepare(
+            'SELECT 1 FROM item WHERE foto_url = ? UNION ALL SELECT 1 FROM item_foto WHERE foto_url = ? LIMIT 1'
+        );
+        $stmt->execute([$url, $url]);
+        if ($stmt->fetchColumn()) return;
+        $arquivo = dirname(__DIR__, 2) . '/public' . $url;
+        if (is_file($arquivo)) @unlink($arquivo);
+    }
 }

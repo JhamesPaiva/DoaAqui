@@ -33,6 +33,16 @@ CREATE TABLE `usuario` (
   `data_cadastro` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- Registro mínimo da versão dos Termos de Uso aceita no cadastro.
+CREATE TABLE `aceite_termo` (
+  `id_aceite` BIGINT PRIMARY KEY AUTO_INCREMENT,
+  `id_usuario` INT NOT NULL,
+  `versao` VARCHAR(40) NOT NULL,
+  `aceito_em` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT `aceite_termo_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE CASCADE,
+  INDEX `aceite_termo_usuario_data` (`id_usuario`, `aceito_em`)
+) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- ------------------------------------------------------------------
 -- Tabela: categoria
 -- ------------------------------------------------------------------
@@ -54,8 +64,9 @@ CREATE TABLE `item` (
   `id_bairro` INT NOT NULL,
   `titulo` VARCHAR(255) NOT NULL,
   `descricao` TEXT COMMENT 'Estado do item e detalhes que ajudam quem for buscar',
-  `foto_url` VARCHAR(255) COMMENT 'Upload de imagem ainda nao implementado no prototipo; campo previsto para uso futuro',
-  `contato_whatsapp` VARCHAR(255) COMMENT 'Opcional; se nulo, usar usuario.telefone_whatsapp do doador',
+  `foto_url` VARCHAR(255) COMMENT 'Foto do anúncio armazenada em public/uploads',
+  `contato_whatsapp` VARCHAR(255) COMMENT 'Contato opcional; só pode ser exibido quando contato_publico = TRUE',
+  `contato_publico` BOOLEAN NOT NULL DEFAULT FALSE COMMENT 'Autorização explícita para exibir o WhatsApp no mural',
   `status` ENUM ('Disponivel', 'Reservado', 'Doado') NOT NULL DEFAULT 'Disponivel',
   `status_moderacao` ENUM ('Pendente', 'Aprovado', 'Rejeitado') NOT NULL DEFAULT 'Pendente',
   `data_publicacao` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

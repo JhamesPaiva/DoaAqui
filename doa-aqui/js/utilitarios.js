@@ -6,6 +6,13 @@ function listaCategorias() {
   return vistas;
 }
 
+// Escape untrusted values before placing them in an HTML template.
+function htmlSeguro(valor) {
+  return String(valor == null ? "" : valor).replace(/[&<>"']/g, function (caractere) {
+    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[caractere];
+  });
+}
+
 // Popula um <select> a partir de uma lista (ex: categorias, bairros).
 // comPlaceholder=true adiciona uma opção "Selecione" vazia no topo (formulários de criação);
 // comPlaceholder=false deixa só as opções da lista (formulários de edição, já vêm preenchidos).
@@ -14,9 +21,17 @@ function preencheSelect(id, lista, comPlaceholder) {
   if (!sel) return;
   var html = comPlaceholder ? '<option value="">Selecione</option>' : "";
   for (var i = 0; i < lista.length; i++) {
-    html += "<option>" + lista[i] + "</option>";
+    html += "<option>" + htmlSeguro(lista[i]) + "</option>";
   }
   sel.innerHTML = html;
+}
+
+// Categorias legadas continuam disponíveis para anúncios existentes e edição,
+// mas não podem ser escolhidas ao criar uma nova doação.
+function categoriasParaNovaDoacao(lista) {
+  return lista.filter(function (nome) {
+    return String(nome).trim().toLocaleLowerCase("pt-BR") !== "alimentos";
+  });
 }
 
 function classeStatus(s) {

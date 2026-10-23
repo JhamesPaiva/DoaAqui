@@ -1,0 +1,15 @@
+.legal-page{min-height:70vh;padding:56px 0 88px;background:var(--paper);color:var(--ink)}
+.legal-page .wrap{max-width:900px}
+.legal-page h1{font-size:clamp(2.25rem,5vw,4rem);color:var(--brand);line-height:1.05;text-wrap:balance}
+.legal-page h2{margin-top:42px;font-size:1.55rem;color:var(--brand);text-wrap:balance;scroll-margin-top:24px}
+.legal-page h3{margin-top:24px;font-size:1.15rem}
+.legal-page p,.legal-page li{max-width:75ch;line-height:1.7;overflow-wrap:anywhere}
+.legal-page ul{padding-left:24px}
+.legal-draft{margin:24px 0;padding:18px 20px;background:#fff2c6;color:#493900;border-radius:12px;font-weight:600}
+.legal-meta{margin:12px 0 32px;color:var(--ink-soft)}
+.legal-back{display:inline-flex;min-height:44px;align-items:center;margin-bottom:28px}
+.legal-page a{color:var(--brand);text-underline-offset:3px}
+.legal-page a:hover{text-decoration-thickness:2px}
+.legal-page :focus-visible{outline:3px solid var(--brand);outline-offset:3px;border-radius:3px}
+html[data-theme=dark] .legal-draft{background:#483f27;color:#fff1b8}
+@media(max-width:600px){.legal-page{padding:36px 0 56px}.legal-page h2{margin-top:34px}.legal-draft{padding:16px}}

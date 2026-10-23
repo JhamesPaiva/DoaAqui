@@ -15,6 +15,7 @@ use DoaAqui\Security\LoginThrottle;
  */
 class AuthService
 {
+    public const VERSAO_TERMOS = '2026-10-23-v1';
     private UsuarioRepository $usuarios;
 
     public function __construct()
@@ -22,11 +23,15 @@ class AuthService
         $this->usuarios = new UsuarioRepository();
     }
 
-    public function cadastrar(string $nome, string $email, string $senha, string $telefone): array
+    public function cadastrar(string $nome, string $email, string $senha, string $telefone, bool $aceitouTermos): array
     {
         $nome = trim($nome);
         $email = strtolower(trim($email));
         $telefone = trim($telefone);
+
+        if (!$aceitouTermos) {
+            return ['ok' => false, 'erro' => 'É necessário aceitar os Termos de Uso para criar uma conta.'];
+        }
 
         if (!Validador::tamanho($nome, 2, 255)) {
             return ['ok' => false, 'erro' => 'Nome precisa ter entre 2 e 255 caracteres.'];
@@ -47,7 +52,7 @@ class AuthService
         }
 
         $hash = password_hash($senha, PASSWORD_DEFAULT);
-        $id = $this->usuarios->criar($nome, $email, $hash, $telefone);
+        $id = $this->usuarios->criar($nome, $email, $hash, $telefone, self::VERSAO_TERMOS);
         $usuario = $this->usuarios->buscarPorId($id);
 
         Auth::logar($usuario);

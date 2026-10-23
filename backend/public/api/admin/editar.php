@@ -18,6 +18,7 @@ if (!$idItem) {
     Response::erro('Informe o id do item.', 422);
 }
 
+$corpo = Request::corpoJson();
 $dados = [
     'titulo' => Request::texto('titulo'),
     'categoria' => Request::texto('categoria'),
@@ -25,6 +26,7 @@ $dados = [
     'descricao' => Request::texto('descricao'),
     'contato' => Request::texto('contato'),
     'fotoUrl' => Request::texto('fotoUrl'),
+    'contatoPublico' => ($corpo['contatoPublico'] ?? false) === true,
 ];
 
 $resultado = (new ModeracaoService())->editar($admin['id'], $idItem, $dados);

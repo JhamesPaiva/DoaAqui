@@ -3,7 +3,7 @@ function desenhaFiltroCategoria() {
   var html = "";
   var cats = listaCategorias();
   for (var i = 0; i < cats.length; i++) {
-    html += '<label class="chip-option"><input type="checkbox" class="cat-filter" value="' + cats[i] + '" checked> ' + cats[i] + '</label>';
+    html += '<label class="chip-option"><input type="checkbox" class="cat-filter" value="' + htmlSeguro(cats[i]) + '" checked> ' + htmlSeguro(cats[i]) + '</label>';
   }
   cont.innerHTML = html;
   filtroAtual.categorias = new Set(cats);
@@ -22,7 +22,7 @@ function desenhaFiltroLocal() {
   var sel = document.getElementById("location-filter");
   var html = '<option value="">Todos os bairros</option>';
   for (var j = 0; j < bairros.length; j++) {
-    html += '<option value="' + bairros[j] + '">' + bairros[j] + '</option>';
+    html += '<option value="' + htmlSeguro(bairros[j]) + '">' + htmlSeguro(bairros[j]) + '</option>';
   }
   sel.innerHTML = html;
 }

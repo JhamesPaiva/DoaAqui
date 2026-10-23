@@ -35,7 +35,7 @@ class ItemRepository
     public function listarAprovadosAdmin(): array
     {
         $pdo = Conexao::obter();
-        $sql = 'SELECT i.id_item, i.titulo, i.descricao, i.foto_url, i.contato_whatsapp, i.status,
+        $sql = 'SELECT i.id_item, i.titulo, i.descricao, i.foto_url, i.contato_whatsapp, i.contato_publico, i.status,
                        i.id_usuario_doador,
                        c.nome AS categoria, b.nome AS bairro
                 FROM item i
@@ -97,7 +97,7 @@ class ItemRepository
         if (array_key_exists('foto_url', $dados) && $dados['foto_url'] !== null) {
             $stmt = $pdo->prepare(
                 'UPDATE item SET titulo = :titulo, descricao = :descricao,
-                        id_categoria = :categoria, id_bairro = :bairro, contato_whatsapp = :contato,
+                        id_categoria = :categoria, id_bairro = :bairro, contato_whatsapp = :contato, contato_publico = :contato_publico,
                         foto_url = :foto_url
                  WHERE id_item = :id'
             );
@@ -105,7 +105,7 @@ class ItemRepository
         } else {
             $stmt = $pdo->prepare(
                 'UPDATE item SET titulo = :titulo, descricao = :descricao,
-                        id_categoria = :categoria, id_bairro = :bairro, contato_whatsapp = :contato
+                        id_categoria = :categoria, id_bairro = :bairro, contato_whatsapp = :contato, contato_publico = :contato_publico
                  WHERE id_item = :id'
             );
         }
@@ -115,6 +115,7 @@ class ItemRepository
         $stmt->bindValue('categoria', $dados['id_categoria']);
         $stmt->bindValue('bairro', $dados['id_bairro']);
         $stmt->bindValue('contato', $dados['contato_whatsapp'] !== '' ? $dados['contato_whatsapp'] : null);
+        $stmt->bindValue('contato_publico', (bool) $dados['contato_publico'], \PDO::PARAM_BOOL);
         $stmt->bindValue('id', $id);
         $stmt->execute();
     }
@@ -124,7 +125,7 @@ class ItemRepository
     public function removerPublicadoDoUsuario(int $id, int $idUsuario): bool
     {
         $stmt = Conexao::obter()->prepare(
-            'UPDATE item SET removido_em = NOW()
+            'UPDATE item SET removido_em = NOW(), foto_url = NULL, contato_whatsapp = NULL, contato_publico = FALSE
              WHERE id_item = :id AND id_usuario_doador = :usuario
                AND status_moderacao = "Aprovado" AND removido_em IS NULL'
         );
@@ -135,7 +136,7 @@ class ItemRepository
     public function remover(int $id): void
     {
         $pdo = Conexao::obter();
-        $stmt = $pdo->prepare('UPDATE item SET removido_em = NOW() WHERE id_item = :id');
+        $stmt = $pdo->prepare('UPDATE item SET removido_em = NOW(), foto_url = NULL, contato_whatsapp = NULL, contato_publico = FALSE WHERE id_item = :id');
         $stmt->execute(['id' => $id]);
     }
 
@@ -189,14 +190,14 @@ class ItemRepository
     {
         $pdo = Conexao::obter();
         $sql = 'SELECT
-                    i.id_item, i.titulo, i.descricao, i.foto_url, i.contato_whatsapp,
+                    i.id_item, i.titulo, i.descricao, i.foto_url,
+                    CASE WHEN i.contato_publico = TRUE THEN i.contato_whatsapp ELSE NULL END AS contato_whatsapp,
+                    i.contato_publico,
                     i.status, i.data_publicacao, i.data_atualizacao,
-                    c.nome AS categoria, b.nome AS bairro,
-                    u.nome AS doador, u.telefone_whatsapp AS doador_telefone
+                    c.nome AS categoria, b.nome AS bairro
                 FROM item i
                 JOIN categoria c ON c.id_categoria = i.id_categoria
                 JOIN bairro b ON b.id_bairro = i.id_bairro
-                JOIN usuario u ON u.id_usuario = i.id_usuario_doador
                 WHERE i.status_moderacao = "Aprovado" AND i.removido_em IS NULL
                 ORDER BY i.data_publicacao DESC';
         return $pdo->query($sql)->fetchAll();
@@ -206,8 +207,8 @@ class ItemRepository
     {
         $pdo = Conexao::obter();
         $stmt = $pdo->prepare(
-            'INSERT INTO item (id_usuario_doador, id_categoria, id_bairro, titulo, descricao, foto_url, contato_whatsapp, status_moderacao)
-             VALUES (:doador, :categoria, :bairro, :titulo, :descricao, :foto_url, :contato, "Pendente")'
+            'INSERT INTO item (id_usuario_doador, id_categoria, id_bairro, titulo, descricao, foto_url, contato_whatsapp, contato_publico, status_moderacao)
+             VALUES (:doador, :categoria, :bairro, :titulo, :descricao, :foto_url, :contato, :contato_publico, "Pendente")'
         );
         $stmt->execute([
             'doador' => $dados['id_usuario_doador'],
@@ -217,6 +218,7 @@ class ItemRepository
             'descricao' => $dados['descricao'],
             'foto_url' => $dados['foto_url'] ?? null,
             'contato' => $dados['contato_whatsapp'] !== '' ? $dados['contato_whatsapp'] : null,
+            'contato_publico' => (bool) $dados['contato_publico'],
         ]);
         return (int) $pdo->lastInsertId();
     }

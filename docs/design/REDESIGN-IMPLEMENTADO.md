@@ -39,8 +39,6 @@ A composição ilustrativa de objetos já existente foi reutilizada no hero e em
 
 Nunito Sans é carregada pelo Google Fonts, com fontes de sistema como alternativa. Não foram adicionados frameworks ou bibliotecas de componentes.
 
-## Cópia anterior e execução
+## Execução
 
-Cópia anterior do frontend: `D:\Documentos\Musicas\doaaqui-backup-before-circular`.
-
-Abrir `http://localhost:8080/`. Nas próximas sessões, iniciar pelo arquivo `iniciar-doaaqui.bat` na raiz do projeto, com o MySQL disponível.
+Para iniciar o projeto, siga as instruções do [README da raiz](../../README.md) e use o atalho `iniciar-doaaqui.bat` com o MySQL disponível.

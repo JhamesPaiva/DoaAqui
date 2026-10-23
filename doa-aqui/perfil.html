@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Meu perfil — DoaAqui</title>
 <meta name="theme-color" content="#BE1768">
+<!-- Em produção, configure API e uploads para os endereços HTTPS reais do backend. -->
+<meta name="doaaqui-api-base" content="http://localhost:8000/api">
+<meta name="doaaqui-uploads-base" content="http://localhost:8000">
 <meta name="description" content="Doe e encontre itens em Muriaé. Conecte-se com sua comunidade pelo DoaAqui.">
 <script src="js/theme.js"></script>
 <link rel="icon" href="assets/brand.svg" type="image/svg+xml">
@@ -34,7 +37,19 @@
 <div class="profile-heading"><a href="index.html">← Voltar ao mural</a><h1>Meu perfil</h1><p>Seu espaço na comunidade DoaAqui.</p></div>
 <p id="profile-state" role="status">Carregando suas informações…</p>
 <div id="profile-content" class="profile-layout" hidden>
-<aside class="profile-identity"><div id="profile-avatar" class="profile-avatar" aria-hidden="true"></div><form id="profile-photo-form" class="profile-photo-form"><label for="profile-photo">Alterar foto de perfil</label><input type="file" id="profile-photo" accept="image/jpeg,image/png,image/webp" required><small>JPG, PNG ou WEBP · até 5 MB</small><button class="btn btn-ghost" type="submit">Salvar foto</button><p id="photo-feedback" role="status"></p></form><h2 id="profile-name"></h2><p id="profile-type"></p><p class="profile-message">Cada doação abre espaço para uma nova história. Obrigado por fazer parte.</p></aside>
+<aside class="profile-identity"><div id="profile-avatar" class="profile-avatar" aria-hidden="true"></div><form id="profile-photo-form" class="profile-photo-form">
+  <button id="edit-profile-photo" class="profile-photo-edit" type="button" aria-expanded="false" aria-controls="profile-photo-editor">Editar foto</button>
+  <div id="profile-photo-editor" class="profile-photo-editor" hidden>
+    <input class="profile-photo-input" type="file" id="profile-photo" name="foto" accept="image/jpeg,image/png,image/webp" required>
+    <label class="profile-photo-picker" for="profile-photo">Escolher imagem</label>
+    <small id="profile-photo-name" class="profile-photo-name">JPG, PNG ou WEBP · até 5 MB</small>
+    <div class="profile-photo-actions">
+      <button id="cancel-profile-photo" class="profile-photo-cancel" type="button">Cancelar</button>
+      <button id="save-profile-photo" class="profile-photo-save" type="submit" disabled>Salvar foto</button>
+    </div>
+  </div>
+  <p id="photo-feedback" class="profile-photo-feedback" role="status" aria-live="polite" hidden></p>
+</form><h2 id="profile-name"></h2><p id="profile-type"></p><p class="profile-message">Cada doação abre espaço para uma nova história. Obrigado por fazer parte.</p></aside>
 <div><section class="profile-details" aria-labelledby="details-title"><h2 id="details-title">Informações da conta</h2><p>Estes são os dados do seu cadastro.</p><dl class="profile-information"><div class="wide"><dt>Nome completo</dt><dd id="profile-fullname"></dd></div><div class="wide"><dt>E-mail</dt><dd id="profile-email"></dd></div><div class="wide"><dt>Telefone / WhatsApp</dt><dd id="profile-phone"></dd></div></dl></section>
 <section class="profile-activity" aria-labelledby="activity-title"><h2 id="activity-title">Suas doações</h2><div class="profile-stats"><div><b id="profile-pending">—</b><span>Aguardando aprovação</span></div><div><b id="profile-published">—</b><span>Anúncios publicados</span></div><div><b id="profile-donated">—</b><span>Marcados como doados</span></div></div><p id="profile-stats-note" class="profile-note">Resumo dos seus anúncios não excluídos.</p></section>
 <div class="profile-actions"><a class="btn btn-forest" href="index.html?minhas=1">Gerenciar minhas doações</a><a class="btn btn-ghost" href="admin.html" id="profile-admin" hidden>Abrir administração</a></div></div>
@@ -62,4 +77,4 @@
     <span>Feito para conectar a comunidade de Muriaé</span>
   </div>
 </footer>
-<script src="js/dados.js"></script><script src="js/api.js"></script><script src="js/auth.js"></script><script src="js/perfil.js"></script></body></html>
+<script src="js/dados.js"></script><script src="js/api.js"></script><script src="js/auth.js"></script><script src="js/perfil.js"></script><script src="js/reveal.js"></script></body></html>

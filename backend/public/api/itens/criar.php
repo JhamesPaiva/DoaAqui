@@ -13,6 +13,7 @@ Request::exigirMetodo('POST');
 $usuario = Auth::exigirLogin();
 Auth::exigirCsrf();
 
+$corpo = Request::corpoJson();
 $dados = [
     'titulo' => Request::texto('titulo'),
     'categoria' => Request::texto('categoria'),
@@ -20,6 +21,7 @@ $dados = [
     'descricao' => Request::texto('descricao'),
     'contato' => Request::texto('contato'),
     'fotoUrl' => Request::texto('fotoUrl'),
+    'contatoPublico' => ($corpo['contatoPublico'] ?? false) === true,
 ];
 
 $resultado = (new ItemService())->publicar($usuario, $dados);

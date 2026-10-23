@@ -26,6 +26,11 @@ class ItemService
         $this->historico = new HistoricoStatusRepository();
     }
 
+    public static function categoriaDisponivelParaNovaDoacao(string $nome): bool
+    {
+        return mb_strtolower(trim($nome), 'UTF-8') !== 'alimentos';
+    }
+
     /** Feed público — já traduz o status do banco (sem acento) pro formato do front-end. */
     public function listarPublicos(): array
     {
@@ -39,8 +44,8 @@ class ItemService
                 'categoria' => $linha['categoria'],
                 'bairro' => $linha['bairro'],
                 'status' => Enums::statusItemParaApp($linha['status']),
-                'doador' => $linha['doador'],
-                'contato' => $linha['contato_whatsapp'] ?: $linha['doador_telefone'],
+                'doador' => 'Pessoa da comunidade',
+                'contato' => !empty($linha['contato_publico']) ? ($linha['contato_whatsapp'] ?? '') : '',
                 'dataPublicacao' => $linha['data_publicacao'],
                 'fotoUrl' => $linha['foto_url'] ?: null,
             ];
@@ -56,6 +61,7 @@ class ItemService
         $titulo = trim($dados['titulo'] ?? '');
         $descricao = trim($dados['descricao'] ?? '');
         $contato = trim($dados['contato'] ?? '');
+        $contatoPublico = ($dados['contatoPublico'] ?? false) === true;
         $nomeCategoria = trim($dados['categoria'] ?? '');
         $nomeBairro = trim($dados['bairro'] ?? '');
 
@@ -72,6 +78,9 @@ class ItemService
         $categoria = $this->categorias->buscarPorNome($nomeCategoria);
         if (!$categoria) {
             return ['ok' => false, 'erro' => 'Categoria inválida.'];
+        }
+        if (!self::categoriaDisponivelParaNovaDoacao($categoria['nome'])) {
+            return ['ok' => false, 'erro' => 'A categoria Alimentos não está disponível para novas doações.'];
         }
 
         $bairro = $this->bairros->buscarPorNome($nomeBairro);
@@ -94,7 +103,8 @@ class ItemService
             'descricao' => $descricao,
             'foto_url' => $fotoUrl !== '' ? $fotoUrl : null,
             // Cai pro telefone do usuário logado quando vazio — mesma regra do mock no front-end.
-            'contato_whatsapp' => $contato !== '' ? $contato : $usuario['telefone'],
+            'contato_whatsapp' => $contatoPublico ? ($contato !== '' ? $contato : $usuario['telefone']) : '',
+            'contato_publico' => $contatoPublico,
         ]);
 
         return [
@@ -148,18 +158,22 @@ class ItemService
 
     public function removerPublicadoProprio(int $idItem, int $idUsuario): array
     {
+        $item = $this->itens->buscarPorId($idItem);
         if (!$this->itens->removerPublicadoDoUsuario($idItem, $idUsuario)) {
             return ['ok' => false, 'erro' => 'Anúncio não encontrado entre suas doações publicadas.'];
         }
+        if (!empty($item['foto_url'])) UploadService::excluirSeNaoReferenciada($item['foto_url']);
         return ['ok' => true];
     }
 
     public function cancelarPendente(int $idItem, int $idUsuario): array
     {
+        $item = $this->itens->buscarPorId($idItem);
         $cancelado = $this->itens->cancelarPendenteDoUsuario($idItem, $idUsuario);
         if (!$cancelado) {
             return ['ok' => false, 'erro' => 'Anúncio não encontrado ou já foi avaliado pela moderação.'];
         }
+        if (!empty($item['foto_url'])) UploadService::excluirSeNaoReferenciada($item['foto_url']);
         return ['ok' => true];
     }
 }

@@ -1,15 +1,19 @@
 // Camada única de comunicação com o backend — nenhum outro arquivo do front-end
-// chama fetch() diretamente. Se o backend estiver rodando em outro endereço/porta,
-// só precisa trocar API_BASE aqui.
+// chama fetch() diretamente. Para usar outro endereço/porta, configure o metadado
+// `doaaqui-api-base` no HTML; o endereço local abaixo é apenas o fallback de desenvolvimento.
 //
 // IMPORTANTE: como a API usa cookie de sessão + CORS com credenciais, o front-end
 // precisa ser servido por um servidor HTTP de verdade (ex: `python3 -m http.server 8080`),
 // não aberto direto como arquivo (file://) — e a origem daqui (protocolo+host+porta)
 // precisa bater exatamente com CORS_ALLOWED_ORIGIN configurado no .env do backend.
-var API_BASE = "http://localhost:8000/api";
+var apiBaseConfigurada = document.querySelector('meta[name="doaaqui-api-base"]');
+var API_BASE = (apiBaseConfigurada && apiBaseConfigurada.content.trim()) || "http://localhost:8000/api";
+API_BASE = API_BASE.replace(/\/+$/, "");
 // Mesma origem do backend, mas sem o "/api" — é onde as fotos enviadas ficam
 // publicamente acessíveis (public/uploads/ do backend).
-var UPLOADS_BASE = "http://localhost:8000";
+var uploadsBaseConfigurada = document.querySelector('meta[name="doaaqui-uploads-base"]');
+var UPLOADS_BASE = (uploadsBaseConfigurada && uploadsBaseConfigurada.content.trim()) || API_BASE.replace(/\/api$/, "");
+UPLOADS_BASE = UPLOADS_BASE.replace(/\/+$/, "");
 
 var csrfTokenAtual = null;
 

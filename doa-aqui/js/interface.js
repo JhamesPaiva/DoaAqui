@@ -66,8 +66,4 @@
     if(e.shiftKey && document.activeElement===first){e.preventDefault();last.focus();}
     if(!e.shiftKey && document.activeElement===last){e.preventDefault();first.focus();}
   });
-  if('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-    var reveal=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){entry.target.classList.add('reveal-active');reveal.unobserve(entry.target);}});},{threshold:.1});
-    document.querySelectorAll('.hero h1,.hero-bottom,.stat,.mural-head,.search-box,.step,.footer-grid>div,.admin-stat').forEach(function(el){reveal.observe(el);});
-  }
 })();

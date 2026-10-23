@@ -15,6 +15,7 @@ function leFormularioNovoItem() {
     local: document.getElementById("f-location").value,
     desc: document.getElementById("f-desc").value.trim(),
     contato: document.getElementById("f-contact").value.trim(),
+    contatoPublico: document.getElementById("f-public-contact").checked,
     arquivoFoto: inputFoto && inputFoto.files[0] ? inputFoto.files[0] : null
   };
 }
@@ -49,6 +50,7 @@ async function publicaItem(dados) {
       bairro: dados.local,
       descricao: dados.desc,
       contato: dados.contato,
+      contatoPublico: dados.contatoPublico,
       fotoUrl: fotoUrl
     }
   });
